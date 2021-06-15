@@ -18,10 +18,10 @@ route.post("/", (req, res, next) => {
   var username = req.body.username;
   var email = req.body.email;
   var password = req.body.password;
-  console.log("username--");
-  console.log("email--", email);
-  console.log("password", password);
-  console.log("data", req.body.forn);
+  // console.log("username--");
+  // console.log("email--", email);
+  // console.log("password", password);
+  // console.log("data", req.body.forn);
   // if(!username){
   //   res.json({
   //     error:'plese enter username(sr)'
@@ -39,8 +39,8 @@ route.post("/", (req, res, next) => {
   // }
 
   bcrypt.hash(password, 10, (err, pass) => {
-    console.log("err", err);
-    console.log("pass", pass);
+    // console.log("err", err);
+    // console.log("pass", pass);
     if (err) {
       res.json({
         error: "form error",

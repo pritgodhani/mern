@@ -3,6 +3,7 @@ import axios from "axios";
 function Profile() {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
+  const [image, setImage] = useState();
   useEffect(() => {
     var token = localStorage.getItem("token");
     var apiData = axios.post("http://localhost:5000/profile", { token: token });
@@ -14,6 +15,8 @@ function Profile() {
         setName(dbuserName);
         var dbuserEmail = dbObj.email;
         setEmail(dbuserEmail);
+        // var dbuserImage = dbObj.image;
+        // setEmail(dbuserImage);
         // console.log(value.data.data.userName);
       },
       (err) => {
@@ -29,15 +32,20 @@ function Profile() {
     if (e.target.name === `email`) {
       setEmail(e.target.value);
     }
+    if (e.target.name === `image`) {
+      setEmail(e.target.value);
+    }
   };
   const handlersubmit = (e) => {
     e.preventDefault();
     console.log(e);
     // console.log(e.target[2].value);
     var token = localStorage.getItem("token");
+    var image = e.target[0].value;
     var username = e.target[1].value;
     var email = e.target[2].value;
     var updateDbData = axios.post("http://localhost:5000/profile/update", {
+      image: image,
       name: username,
       email: email,
       token: token,
@@ -53,7 +61,11 @@ function Profile() {
     <>
       <div className="container">
         <div className="card" style={{ width: "auto" }}>
-          <img src="..." className="card-img-top" alt="profile_image" />
+          <img
+            src="/server/public/profileImg/1623776637528Screenshot from 2020-11-11 20-15-46.png"
+            className="card-img-top"
+            alt="profile_image"
+          />
           <div className="card-body">
             <div className="container mb-3">
               {/* <h1>sing up</h1> */}

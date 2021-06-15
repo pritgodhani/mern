@@ -19,6 +19,7 @@ var registerSchema = mongoose.Schema({
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
   },
   password: { type: String, require: true },
+  image: { type: String, require: false },
   date: {
     type: Date,
     default: Date.now,

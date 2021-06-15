@@ -1,18 +1,16 @@
-import react, { useEffect } from 'react';
-import axios from 'axios';
+import react, { useEffect } from "react";
+import axios from "axios";
 
-const App = ()=>{
+const App = () => {
+  const click = async () => {
+    const { data } = await axios.get("http://localhost:5000/form");
+    // console.log(data);
+  };
 
-    const click=async() => {
-    const {data}=await axios.get('http://localhost:5000/form')
-    console.log(data);
-    }
-
-    return(
-        <>
-        <h1 onClick={click} >App</h1>
-        
-        </>
-    );
+  return (
+    <>
+      <h1 onClick={click}>App</h1>
+    </>
+  );
 };
 export default App;
