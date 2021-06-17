@@ -3,7 +3,7 @@ import axios from "axios";
 function Profile() {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
-  const [image, setImage] = useState();
+  // const [image, setImage] = useState();
   useEffect(() => {
     var token = localStorage.getItem("token");
     var apiData = axios.post("http://localhost:5000/profile", { token: token });
@@ -16,7 +16,8 @@ function Profile() {
         var dbuserEmail = dbObj.email;
         setEmail(dbuserEmail);
         // var dbuserImage = dbObj.image;
-        // setEmail(dbuserImage);
+        // setImage(dbuserImage);
+
         // console.log(value.data.data.userName);
       },
       (err) => {
@@ -32,20 +33,26 @@ function Profile() {
     if (e.target.name === `email`) {
       setEmail(e.target.value);
     }
-    if (e.target.name === `image`) {
-      setEmail(e.target.value);
-    }
+  };
+  const handlerImage = (e) => {
+    // setImage(e.target.files[0]);
+    console.log(e.target.files[0]);
   };
   const handlersubmit = (e) => {
     e.preventDefault();
-    console.log(e);
+    // console.log(e);
     // console.log(e.target[2].value);
     var token = localStorage.getItem("token");
-    var image = e.target[0].value;
+    // const data = new FormData();
+    // data.append("image", e.target.files[0]);
+    // data.append("username", e.target[1].value);
+    // data.append("email", e.target[2].value);
+    // var image = e.target[0].value;
     var username = e.target[1].value;
     var email = e.target[2].value;
+    console.log(username);
+    console.log(email);
     var updateDbData = axios.post("http://localhost:5000/profile/update", {
-      image: image,
       name: username,
       email: email,
       token: token,
@@ -84,7 +91,7 @@ function Profile() {
                     name="image"
                     placeholder="image"
                     onChange={(e) => {
-                      handlerChange(e);
+                      handlerImage(e);
                     }}
                   />
                 </div>

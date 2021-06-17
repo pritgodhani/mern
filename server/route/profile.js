@@ -41,12 +41,12 @@ route.post("/", (req, res, next) => {
       });
     }
     if (decoded) {
-      console.log(decoded.id);
+      // console.log(decoded.id);
       var dbData = registerModel.findById(decoded.id);
       dbData
         .exec()
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           res.json({
             data: data,
           });
@@ -61,12 +61,13 @@ route.post("/", (req, res, next) => {
 });
 
 route.post("/update", upload.single("image"), (req, res, next) => {
-  console.log(req.file.path);
+  // console.log(req.file.path);
+  // console.log(req.data);
 
   var fUsername = req.body.name;
   var fEmail = req.body.email;
   var token = req.body.token;
-  var image = req.file.path;
+  // var image = req.file.path;
   jwt.verify(token, "secret", function (err, decoded) {
     if (err) {
       res.json({
@@ -75,26 +76,45 @@ route.post("/update", upload.single("image"), (req, res, next) => {
     }
     if (decoded) {
       // console.log(decoded.id);
-      var dbData = registerModel.findByIdAndUpdate(decoded.id);
-      var updateObj = new registerModel({
-        userName: fUsername,
-        email: fEmail,
-        image: image,
-      });
-      updateObj
-        .save()
-        .then((data) => {
-          // console.log(data);
-          res.json({
-            massege: "update succesefully",
-            data: data,
-          });
-        })
-        .catch((err) => {
-          res.json({
-            error: err,
-          });
-        });
+      var dbData = registerModel.findByIdAndUpdate(
+        decoded.id,
+        {
+          userName: fUsername,
+          email: fEmail,
+        },
+        (err, data) => {
+          if (err) {
+            res.json({
+              error: err,
+            });
+          }
+          if (data) {
+            res.json({
+              massege: "update succesefully",
+              data: data,
+            });
+          }
+        }
+      );
+      // var updateObj = new registerModel({
+      //   userName: fUsername,
+      //   email: fEmail,
+      //   image: image,
+      // });
+      // dbDatas
+      //   .save()
+      //   .then((data) => {
+      //     // console.log(data);
+      //     res.json({
+      //       massege: "update succesefully",
+      //       data: data,
+      //     });
+      //   })
+      //   .catch((err) => {
+      //     res.json({
+      //       error: err,
+      //     });
+      //   });
     }
   });
 });
