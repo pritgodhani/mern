@@ -3,6 +3,7 @@ var jwt = require("jsonwebtoken");
 const route = express.Router();
 const multer = require("multer");
 const registerModel = require("../models/register");
+const proImgModel = require("../models/profile");
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "./public/profileImg/");
@@ -12,7 +13,6 @@ var storage = multer.diskStorage({
   },
 });
 const fileFilter = (req, file, cb) => {
-  // console.log(file.mimetype);
   if (
     file.mimetype === "image/png" ||
     file.mimetype === "image/jpeg" ||
@@ -33,7 +33,7 @@ const upload = multer({
 });
 route.post("/", (req, res, next) => {
   let token = req.body.token;
-  // console.log(token);
+
   jwt.verify(token, "secret", function (err, decoded) {
     if (err) {
       res.json({
@@ -41,12 +41,10 @@ route.post("/", (req, res, next) => {
       });
     }
     if (decoded) {
-      // console.log(decoded.id);
       var dbData = registerModel.findById(decoded.id);
       dbData
         .exec()
         .then((data) => {
-          // console.log(data);
           res.json({
             data: data,
           });
@@ -61,9 +59,8 @@ route.post("/", (req, res, next) => {
 });
 
 route.post("/update", upload.single("image"), (req, res, next) => {
-  // console.log(req.file.path);
-  // console.log(req.data);
-
+  var imagepath = req.file.filename;
+  console.log(req.file);
   var fUsername = req.body.name;
   var fEmail = req.body.email;
   var token = req.body.token;
@@ -75,8 +72,24 @@ route.post("/update", upload.single("image"), (req, res, next) => {
       });
     }
     if (decoded) {
-      // console.log(decoded.id);
-      var dbData = registerModel.findByIdAndUpdate(
+      var imagePath = new proImgModel({
+        id: decoded.id,
+        imagePath: "profileImg/" + imagepath,
+      });
+      imagePath
+        .save()
+        .then((data) => {
+          res.json({
+            massege: "save",
+            data: data,
+          });
+        })
+        .catch((err) => {
+          res.json({
+            error: err,
+          });
+        });
+      registerModel.findByIdAndUpdate(
         decoded.id,
         {
           userName: fUsername,
@@ -96,26 +109,24 @@ route.post("/update", upload.single("image"), (req, res, next) => {
           }
         }
       );
-      // var updateObj = new registerModel({
-      //   userName: fUsername,
-      //   email: fEmail,
-      //   image: image,
-      // });
-      // dbDatas
-      //   .save()
-      //   .then((data) => {
-      //     // console.log(data);
-      //     res.json({
-      //       massege: "update succesefully",
-      //       data: data,
-      //     });
-      //   })
-      //   .catch((err) => {
-      //     res.json({
-      //       error: err,
-      //     });
-      //   });
     }
   });
 });
+route.post("/imagepath", (req, res, next) => {
+  var id = req.body.id;
+  var dbdata = proImgModel.find((id = id));
+  dbdata
+    .exec()
+    .then((data) => {
+      res.json({
+        data: data,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        error: err,
+      });
+    });
+});
+
 module.exports = route;

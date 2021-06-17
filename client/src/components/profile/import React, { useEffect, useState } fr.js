@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import profile from "../../../../server/models/profile";
 
 function Profile() {
   const [name, setName] = useState();
@@ -28,20 +29,20 @@ function Profile() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-  var emgId = imagepath;
-  var imagePath = axios.post("http://localhost:5000/profile/imagepath", {
-    id: emgId,
-  });
-  imagePath
-    .then((value) => {
-      setProFilePath(value.data.data[0].imagePath);
-      console.log(value.data.data[0].imagePath);
-    })
-    .catch((err) => {
-      // console.log(err);
-      console.log(err);
+    var emgId = imagepath;
+    var imagePath = axios.post("http://localhost:5000/profile/imagepath", {
+      id: emgId,
     });
+    imagePath
+      .then((value) => {
+        setProFilePath(value.data.data[0].imagePath);
+        console.log(value.data.data[0].imagePath);
+      })
+      .catch((err) => {
+        // console.log(err);
+        console.log(err);
+      });
+  }, []);
 
   const handlerChange = (e) => {
     if (e.target.name === `name`) {
@@ -81,14 +82,13 @@ function Profile() {
   return (
     <>
       <div className="container">
+        {console.log("123123", proFilePath)}
         <div className="card" style={{ width: "auto" }}>
-          <div style={{ width: "300px" }}>
-            <img
-              src={`http://localhost:5000/${proFilePath}`}
-              className="img-thumbnail"
-              alt="profile_image "
-            />
-          </div>
+          {/* <img
+            src={`http://localhost:5000/${proFilePath}`}
+            className="card-img-top"
+            alt="profile_image"
+          /> */}
           <div className="card-body">
             <div className="container mb-3">
               {/* <h1>sing up</h1> */}

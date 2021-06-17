@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { schema } = require("./profile");
 mongoose.connect(
   "mongodb://localhost/node-react-api",
   { useNewUrlParser: true },
@@ -19,7 +20,7 @@ var registerSchema = mongoose.Schema({
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
   },
   password: { type: String, require: true },
-  image: { type: String, require: false },
+  image: { type: mongoose.Schema.Types.ObjectId, ref: "profileImage" },
   date: {
     type: Date,
     default: Date.now,
