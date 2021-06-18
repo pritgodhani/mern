@@ -37,7 +37,7 @@ route.post("/", (req, res, next) => {
   jwt.verify(token, "secret", function (err, decoded) {
     if (err) {
       res.json({
-        error: err,
+        error: "token decord error",
       });
     }
     if (decoded) {
@@ -60,7 +60,7 @@ route.post("/", (req, res, next) => {
 
 route.post("/update", upload.single("image"), (req, res, next) => {
   var imagepath = req.file.filename;
-  console.log(req.file);
+  // console.log(req.file);
   var fUsername = req.body.name;
   var fEmail = req.body.email;
   var token = req.body.token;
@@ -86,7 +86,7 @@ route.post("/update", upload.single("image"), (req, res, next) => {
         })
         .catch((err) => {
           res.json({
-            error: err,
+            error: "insert image path error",
           });
         });
       registerModel.findByIdAndUpdate(
@@ -98,7 +98,7 @@ route.post("/update", upload.single("image"), (req, res, next) => {
         (err, data) => {
           if (err) {
             res.json({
-              error: err,
+              error: "update error",
             });
           }
           if (data) {
@@ -113,8 +113,9 @@ route.post("/update", upload.single("image"), (req, res, next) => {
   });
 });
 route.post("/imagepath", (req, res, next) => {
-  var id = req.body.id;
-  var dbdata = proImgModel.find((id = id));
+  var cid = req.body.userid;
+  console.log(cid);
+  var dbdata = proImgModel.findOne((id = cid));
   dbdata
     .exec()
     .then((data) => {
@@ -124,7 +125,7 @@ route.post("/imagepath", (req, res, next) => {
     })
     .catch((err) => {
       res.json({
-        error: err,
+        error: "imagepath",
       });
     });
 });

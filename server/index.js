@@ -6,6 +6,7 @@ const posts = require("./route/posts");
 const register = require("./route/register");
 const login = require("./route/login");
 const profile = require("./route/profile");
+const formmodel = require("./models/formData");
 const app = express();
 app.use(express.json());
 
@@ -24,6 +25,7 @@ async () =>
     useUnifiedTopology: true,
     useFindAndModify: false,
   });
+mongoose.set("useCreateIndex", true);
 app.listen(PORT, () => console.log(`server runing port is: ${PORT}`));
 
 app.use((req, res, next) => {

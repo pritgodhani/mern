@@ -5,7 +5,9 @@ function Profile() {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [image, setImage] = useState();
-  const [imagepath, setImagepath] = useState();
+  const [userId, setUserId] = useState();
+  // const [imagepath, setImagepath] = useState();
+  // console.log(userId);
   const [proFilePath, setProFilePath] = useState();
   useEffect(() => {
     var token = localStorage.getItem("token");
@@ -15,34 +17,39 @@ function Profile() {
         // console.log(value);
         var dbObj = value.data.data;
         // console.log(dbObj.id);
+        // console.log(imagePath);
 
         var dbuserName = dbObj.userName;
         setName(dbuserName);
         var dbuserEmail = dbObj.email;
         setEmail(dbuserEmail);
-        var imagePath = dbObj.id;
-        setImagepath(imagePath);
-
+        var userid = dbObj._id;
+        setUserId(userid);
+        // setImagepath(imagePath);
+        // console.log(imagepath);
         // console.log(value.data.data.userName);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-  var emgId = imagepath;
-  var imagePath = axios.post("http://localhost:5000/profile/imagepath", {
-    id: emgId,
-  });
-  imagePath
-    .then((value) => {
-      setProFilePath(value.data.data[0].imagePath);
-      console.log(value.data.data[0].imagePath);
-    })
-    .catch((err) => {
-      // console.log(err);
-      console.log(err);
-    });
-
+  useEffect(() => {
+    console.log(userId);
+    const data = new FormData();
+    data.append("userid", userId);
+    var imgPath = axios.post("http://localhost:5000/profile/imagepath", data);
+    imgPath
+      .then((value) => {
+        // console.log(value);
+        console.log(value.data.data.imagePath);
+        setProFilePath(value.data.data.imagePath);
+      })
+      .catch((err) => {
+        // console.log(err);
+        console.log(err);
+      });
+  }, [userId]);
+  // console.log(imagepath);
   const handlerChange = (e) => {
     if (e.target.name === `name`) {
       setName(e.target.value);
@@ -80,6 +87,7 @@ function Profile() {
   };
   return (
     <>
+      {/* {console.log(proFilePath)} */}
       <div className="container">
         <div className="card" style={{ width: "auto" }}>
           <div style={{ width: "300px" }}>
