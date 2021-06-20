@@ -5,9 +5,6 @@ function Profile() {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [image, setImage] = useState();
-  const [userId, setUserId] = useState();
-  // const [imagepath, setImagepath] = useState();
-  // console.log(userId);
   const [proFilePath, setProFilePath] = useState();
   useEffect(() => {
     var token = localStorage.getItem("token");
@@ -24,7 +21,21 @@ function Profile() {
         var dbuserEmail = dbObj.email;
         setEmail(dbuserEmail);
         var userid = dbObj._id;
-        setUserId(userid);
+        var imgPath = axios.post("http://localhost:5000/profile/imagepath", {
+          id: userid,
+        });
+        // console.log(userid);
+        imgPath
+          .then((value) => {
+            // console.log(value);
+
+            // console.log(value.data.data.imagePath);
+            setProFilePath(value.data.data.imagePath);
+          })
+          .catch((err) => {
+            // console.log(err);
+            console.log(err);
+          });
         // setImagepath(imagePath);
         // console.log(imagepath);
         // console.log(value.data.data.userName);
@@ -33,22 +44,7 @@ function Profile() {
         console.log(err);
       });
   }, []);
-  useEffect(() => {
-    console.log(userId);
-    const data = new FormData();
-    data.append("userid", userId);
-    var imgPath = axios.post("http://localhost:5000/profile/imagepath", data);
-    imgPath
-      .then((value) => {
-        // console.log(value);
-        console.log(value.data.data.imagePath);
-        setProFilePath(value.data.data.imagePath);
-      })
-      .catch((err) => {
-        // console.log(err);
-        console.log(err);
-      });
-  }, [userId]);
+
   // console.log(imagepath);
   const handlerChange = (e) => {
     if (e.target.name === `name`) {
@@ -58,30 +54,57 @@ function Profile() {
       setEmail(e.target.value);
     }
   };
+  const handlersubmit = (e) => {
+    e.preventDefault();
+    var token = localStorage.getItem("token");
+    var username = e.target[0].value;
+    var email = e.target[1].value;
+    axios
+      .post("http://localhost:5000/profile/updateEmailAndUsername", {
+        token: token,
+        name: username,
+        email: email,
+      })
+      .then(function (response) {
+        // console.log(response.data.data);
+        if (response.data.error) {
+          alert(response.data.error.message);
+        }
+        if (response.data.data) {
+          alert("update succesfuly");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert(error.massege);
+      });
+  };
   const handlerImage = (e) => {
     // console.log(e.target.files[0]);
     setImage(e.target.files[0]);
   };
-  const handlersubmit = (e) => {
+  const handlersubmitimg = (e) => {
     e.preventDefault();
-
+    // console.log(image);
     var token = localStorage.getItem("token");
     // console.log(image);
     const data = new FormData();
     data.append("image", image);
-    data.append("name", e.target[1].value);
-    data.append("email", e.target[2].value);
     data.append("token", token);
 
-    var updateDbData = axios.post("http://localhost:5000/profile/update", data);
+    var updateDbData = axios.post(
+      "http://localhost:5000/profile/updateimg",
+      data
+    );
     updateDbData
       .then((value) => {
-        // console.log(value.data);
-        alert(value.data.massege);
+        // console.log(value.data.data);
+        if (value.data.data) {
+          alert(value.data.massege);
+        }
         // console.log(value);
       })
       .catch((err) => {
-        // console.log(err);
         console.log(err);
       });
   };
@@ -104,7 +127,7 @@ function Profile() {
               <form
                 className="profile"
                 onSubmit={(e) => {
-                  handlersubmit(e);
+                  handlersubmitimg(e);
                 }}
               >
                 <div className="form-floating mb-3">
@@ -119,6 +142,18 @@ function Profile() {
                     }}
                   />
                 </div>
+                <div className="form-floating mb-3">
+                  <button type="submit" className="btn btn-primary">
+                    update
+                  </button>
+                </div>
+              </form>
+              <form
+                className="profile"
+                onSubmit={(e) => {
+                  handlersubmit(e);
+                }}
+              >
                 <div className="form-floating mb-3">
                   <input
                     type="text"
@@ -148,7 +183,7 @@ function Profile() {
 
                 <div className="form-floating mb-3">
                   <button type="submit" className="btn btn-primary">
-                    singup
+                    update
                   </button>
                 </div>
               </form>

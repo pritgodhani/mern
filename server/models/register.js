@@ -3,7 +3,8 @@ const { schema } = require("./profile");
 mongoose.connect(
   "mongodb://localhost/node-react-api",
   { useNewUrlParser: true },
-  { useUnifiedTopology: true }
+  { useUnifiedTopology: true },
+  { useFindAndModify: true }
 );
 
 var registerSchema = mongoose.Schema({

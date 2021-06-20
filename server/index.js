@@ -23,7 +23,7 @@ async () =>
   await mongoose.connect(CONECTION_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false,
+    useFindAndModify: true,
   });
 mongoose.set("useCreateIndex", true);
 app.listen(PORT, () => console.log(`server runing port is: ${PORT}`));

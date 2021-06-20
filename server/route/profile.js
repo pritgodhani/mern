@@ -57,68 +57,114 @@ route.post("/", (req, res, next) => {
     }
   });
 });
-
-route.post("/update", upload.single("image"), (req, res, next) => {
-  var imagepath = req.file.filename;
-  // console.log(req.file);
+route.post("/updateEmailAndUsername", (req, res, next) => {
   var fUsername = req.body.name;
   var fEmail = req.body.email;
   var token = req.body.token;
-  // var image = req.file.path;
-  jwt.verify(token, "secret", function (err, decoded) {
+  jwt.verify(token, "secret", (err, decoded) => {
     if (err) {
       res.json({
         error: err,
       });
     }
     if (decoded) {
-      var imagePath = new proImgModel({
-        id: decoded.id,
-        imagePath: "profileImg/" + imagepath,
-      });
-      imagePath
-        .save()
+      var profielEmailAndUsername = registerModel.findByIdAndUpdate(
+        decoded.id,
+        {
+          userName: fUsername,
+          email: fEmail,
+        }
+      );
+      profielEmailAndUsername
         .then((data) => {
           res.json({
-            massege: "save",
             data: data,
           });
         })
         .catch((err) => {
           res.json({
-            error: "insert image path error",
+            error: err,
           });
         });
-      registerModel.findByIdAndUpdate(
-        decoded.id,
-        {
-          userName: fUsername,
-          email: fEmail,
-        },
-        (err, data) => {
-          if (err) {
-            res.json({
-              error: "update error",
+    }
+  });
+});
+route.post("/updateimg", upload.single("image"), (req, res, next) => {
+  console.log("image");
+  var imagepath = req.file.filename;
+  // console.log("photo", req.file);
+  var token = req.body.token;
+  // var image = req.file.path;
+  // console.log("token", token);
+  jwt.verify(token, "secret", (err, decoded) => {
+    // console.log("jwt");
+    if (err) {
+      res.json({
+        error: "token error",
+      });
+    }
+    if (decoded) {
+      console.log(decoded.id);
+      var upAndInProPath = proImgModel.find({ id: decoded.id });
+      upAndInProPath
+        .exec()
+        .then((data) => {
+          console.log("data", data.length);
+          if (data.length > 0) {
+            var updateprofile = proImgModel.findOneAndUpdate(
+              { id: decoded.id },
+              {
+                imagePath: "profileImg/" + imagepath,
+              }
+            );
+            console.log("image");
+            updateprofile
+              .then((data) => {
+                res.json({
+                  massege: "update succesfuly",
+                  data: data,
+                });
+              })
+              .catch((err) => {
+                res.json({
+                  error: err,
+                });
+              });
+          } else {
+            console.log("save image");
+            var imagePath = new proImgModel({
+              id: decoded.id,
+              imagePath: "profileImg/" + imagepath,
             });
+            imagePath
+              .save()
+              .then((data) => {
+                res.json({
+                  massege: "saved",
+                  data: data,
+                });
+              })
+              .catch((err) => {
+                res.json({
+                  error: err,
+                });
+              });
           }
-          if (data) {
-            res.json({
-              massege: "update succesefully",
-              data: data,
-            });
-          }
-        }
-      );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   });
 });
 route.post("/imagepath", (req, res, next) => {
-  var cid = req.body.userid;
-  console.log(cid);
-  var dbdata = proImgModel.findOne((id = cid));
+  var cid = req.body.id;
+  // console.log(cid);
+  var dbdata = proImgModel.findOne({ id: cid });
   dbdata
     .exec()
     .then((data) => {
+      // console.log(data);
       res.json({
         data: data,
       });
@@ -126,6 +172,7 @@ route.post("/imagepath", (req, res, next) => {
     .catch((err) => {
       res.json({
         error: "imagepath",
+        realerror: err,
       });
     });
 });

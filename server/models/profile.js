@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 mongoose.connect(
   "mongodb://localhost/node-react-api",
   { useNewUrlParser: true },
-  { useUnifiedTopology: true }
+  { useUnifiedTopology: true },
+  { useFindAndModify: true }
 );
 
 var proImgSchema = mongoose.Schema({
