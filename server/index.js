@@ -6,6 +6,7 @@ const posts = require("./route/posts");
 const register = require("./route/register");
 const login = require("./route/login");
 const profile = require("./route/profile");
+const mypost = require("./route/mypost");
 const formmodel = require("./models/formData");
 const app = express();
 app.use(express.json());
@@ -16,6 +17,7 @@ app.use("/form", posts);
 app.use("/register", register);
 app.use("/login", login);
 app.use("/profile", profile);
+app.use("/mypost", mypost);
 const CONECTION_URL = "mongodb://localhost/node-react-api";
 const PORT = process.env.PORT || 5000;
 
@@ -24,8 +26,9 @@ async () =>
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: true,
+    useCreateIndex: true,
   });
-mongoose.set("useCreateIndex", true);
+
 app.listen(PORT, () => console.log(`server runing port is: ${PORT}`));
 
 app.use((req, res, next) => {

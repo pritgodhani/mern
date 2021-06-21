@@ -4,6 +4,7 @@ const route = express.Router();
 const multer = require("multer");
 const registerModel = require("../models/register");
 const proImgModel = require("../models/profile");
+var fs = require("fs");
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "./public/profileImg/");
@@ -111,6 +112,8 @@ route.post("/updateimg", upload.single("image"), (req, res, next) => {
         .then((data) => {
           console.log("data", data.length);
           if (data.length > 0) {
+            // console.log(data[0].imagePath);
+
             var updateprofile = proImgModel.findOneAndUpdate(
               { id: decoded.id },
               {

@@ -113,16 +113,15 @@ function Profile() {
       {/* {console.log(proFilePath)} */}
       <div className="container">
         <div className="card" style={{ width: "auto" }}>
-          <div style={{ width: "300px" }}>
-            <img
-              src={`http://localhost:5000/${proFilePath}`}
-              className="img-thumbnail"
-              alt="profile_image "
-            />
-          </div>
           <div className="card-body">
             <div className="container mb-3">
-              {/* <h1>sing up</h1> */}
+              <div style={{ width: "300px" }}>
+                <img
+                  src={`http://localhost:5000/${proFilePath}`}
+                  className="img-thumbnail"
+                  alt="profile_image "
+                />
+              </div>
               <br />
               <form
                 className="profile"
