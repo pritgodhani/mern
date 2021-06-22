@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 function Logout() {
   let history = useHistory();
   localStorage.removeItem("token");
+  localStorage.removeItem("peofileimg");
   window.location.reload();
   history.push("/login");
   // window.location.href = "/login";

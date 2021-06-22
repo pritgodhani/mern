@@ -30,7 +30,9 @@ function Profile() {
             // console.log(value);
 
             // console.log(value.data.data.imagePath);
+            let profileimg = value.data.data.imagePath;
             setProFilePath(value.data.data.imagePath);
+            localStorage.setItem("profileimg", profileimg);
           })
           .catch((err) => {
             // console.log(err);

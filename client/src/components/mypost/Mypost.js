@@ -1,9 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Post from "./Post";
 import Axios from "axios";
 function Mypost() {
   const [mypostimg, setMypostImg] = useState();
   const [posttitle, setPostTitle] = useState();
+  const [dbmyposts, setDbMyPost] = useState([]);
+  useEffect(() => {
+    var token = localStorage.getItem("token");
+    var getmypost = Axios.get("http://localhost:5000/mypost/", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    getmypost
+      .then((data) => {
+        console.log("mypost 2 ");
+        setDbMyPost(data.data.data);
+        // console.log(data.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    var getmypost = Axios.get("http://localhost:5000/mypost/username", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    getmypost
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   const handlerImage = (e) => {
     // console.log(e.target.files[0]);
     setMypostImg(e.target.files[0]);
@@ -16,31 +47,35 @@ function Mypost() {
     e.preventDefault();
 
     var formdata = new FormData();
-    formdata.append("mypostimg", mypostimg);
+    formdata.append("image", mypostimg);
     formdata.append("mptitle", posttitle);
     var token = localStorage.getItem("token");
     // console.log("ckdmvlkndfvjk fdkvmd");
 
-    const { data } = await Axios.post(
-      "http://localhost:5000/mypost/",
-      {
-        authorization: "Bearer " + token,
+    const mypost = Axios.post("http://localhost:5000/mypost/", formdata, {
+      headers: {
+        Authorization: "Bearer " + token,
       },
-      (err, data) => {
+    });
+    mypost
+      .then((data) => {
+        if (data) {
+          alert(data.data.message);
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
         if (err) {
           console.log("err from mypost", err);
+          // alert(data.data.message);
         }
-        if (data) {
-          console.log("mypost data", data);
-        }
-      }
-    );
-    // console.log(data);
-    e.preventDefault();
+      });
+    // console.log(.ldata);
   };
+
+  const postIten = dbmyposts.map((dbmypost) => <Post dataArry={dbmypost} />);
   return (
     <>
-      {/* {console.log(proFilePath)} */}
       <div className="container">
         <div className="card" style={{ width: "auto" }}>
           <div className="card-body">
@@ -85,7 +120,10 @@ function Mypost() {
               </form>
               <div className="container mb-3" style={{ width: "auto" }}>
                 <h1>My Post</h1>
-                <Post />
+                <div>
+                  {/* {console.log("ddd", postIten)} */}
+                  {postIten}
+                </div>
               </div>
             </div>
           </div>

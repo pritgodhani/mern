@@ -10,7 +10,6 @@ var mypostSchema = mongoose.Schema({
   id: {
     type: String,
     require: true,
-    unique: true,
   },
   postImg: { type: String, require: false },
   postTitle: { type: String, require: false },
