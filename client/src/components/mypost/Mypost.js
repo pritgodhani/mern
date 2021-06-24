@@ -5,7 +5,13 @@ function Mypost() {
   const [mypostimg, setMypostImg] = useState();
   const [posttitle, setPostTitle] = useState();
   const [dbmyposts, setDbMyPost] = useState([]);
+  const [userName, setUserName] = useState();
+  const [proImg, setProImg] = useState();
   useEffect(() => {
+    mypostData();
+    uNmaeAndProfile();
+  }, []);
+  function mypostData() {
     var token = localStorage.getItem("token");
     var getmypost = Axios.get("http://localhost:5000/mypost/", {
       headers: {
@@ -14,27 +20,42 @@ function Mypost() {
     });
     getmypost
       .then((data) => {
-        console.log("mypost 2 ");
         setDbMyPost(data.data.data);
         // console.log(data.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
-    var getmypost = Axios.get("http://localhost:5000/mypost/username", {
+  }
+  function uNmaeAndProfile() {
+    var token = localStorage.getItem("token");
+    var apiData = Axios.get("http://localhost:5000/profile", {
       headers: {
         Authorization: "Bearer " + token,
       },
     });
-    getmypost
-      .then((data) => {
-        console.log(data);
+    apiData
+      .then((value) => {
+        var dbObj = value.data.data;
+
+        var dbuserName = dbObj.userName;
+        setUserName(dbuserName);
+        var userid = dbObj._id;
+        var imgPath = Axios.post("http://localhost:5000/profile/imagepath", {
+          id: userid,
+        });
+        imgPath
+          .then((value) => {
+            setProImg(value.data.data.imagePath);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-
+  }
   const handlerImage = (e) => {
     // console.log(e.target.files[0]);
     setMypostImg(e.target.files[0]);
@@ -61,7 +82,7 @@ function Mypost() {
       .then((data) => {
         if (data) {
           alert(data.data.message);
-          window.location.reload();
+          mypostData();
         }
       })
       .catch((err) => {
@@ -73,7 +94,9 @@ function Mypost() {
     // console.log(.ldata);
   };
 
-  const postIten = dbmyposts.map((dbmypost) => <Post dataArry={dbmypost} />);
+  const postIten = dbmyposts.map((dbmypost) => (
+    <Post dataArry={dbmypost} uName={userName} pImg={proImg} />
+  ));
   return (
     <>
       <div className="container">

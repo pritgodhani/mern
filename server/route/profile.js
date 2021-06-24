@@ -32,8 +32,8 @@ const upload = multer({
   },
   fileFilter: fileFilter,
 });
-route.post("/", (req, res, next) => {
-  let token = req.body.token;
+route.get("/", (req, res, next) => {
+  let token = req.headers.authorization.split(" ")[1];
 
   jwt.verify(token, "secret", function (err, decoded) {
     if (err) {
@@ -58,10 +58,12 @@ route.post("/", (req, res, next) => {
     }
   });
 });
-route.post("/updateEmailAndUsername", (req, res, next) => {
+route.post("/", upload.single("image"), (req, res, next) => {
+  var token = req.header.authorization.split(" "[1]);
+  console.log(token);
   var fUsername = req.body.name;
   var fEmail = req.body.email;
-  var token = req.body.token;
+  var imageName = req.file.filename;
   jwt.verify(token, "secret", (err, decoded) => {
     if (err) {
       res.json({
@@ -69,34 +71,54 @@ route.post("/updateEmailAndUsername", (req, res, next) => {
       });
     }
     if (decoded) {
-      var profielEmailAndUsername = registerModel.findByIdAndUpdate(
-        decoded.id,
-        {
-          userName: fUsername,
-          email: fEmail,
-        }
-      );
-      profielEmailAndUsername
+      var deletOddProImg = registerModel.findById(decoded.id);
+      deletOddProImg
         .then((data) => {
-          res.json({
-            data: data,
+          console.log(data);
+          // if (fs.existsSync(`public/${oddimgname}`)) {
+          //   fs.unlinkSync(`public/${oddimgname}`, (err) => {
+          //     if (err) {
+          //       console.log(err);
+          //       res.json({
+          //         error: err,
+          //       });
+          //     } else {
+          //       console.log("Successfully deleted the file.");
+          //     }
+          //   });
+          // }
+          var registerDataUpdate = registerModel.findByIdAndUpdate(decoded.id, {
+            userName: fUsername,
+            email: fEmail,
+            image: "profileImg/" + imageName,
           });
+          registerDataUpdate
+            .then((data) => {
+              res.json({
+                data: data,
+              });
+            })
+            .catch((err) => {
+              res.json({
+                error: err,
+              });
+            });
         })
         .catch((err) => {
           res.json({
             error: err,
+            Message: "pid error",
           });
         });
     }
   });
 });
 route.post("/updateimg", upload.single("image"), (req, res, next) => {
-  console.log("image");
-  var imagepath = req.file.filename;
+  var imageName = req.file.filename;
   // console.log("photo", req.file);
-  var token = req.body.token;
+  var token = req.headers.authorization.split(" ")[1];
   // var image = req.file.path;
-  // console.log("token", token);
+  console.log("token", token);
   jwt.verify(token, "secret", (err, decoded) => {
     // console.log("jwt");
     if (err) {
@@ -109,18 +131,32 @@ route.post("/updateimg", upload.single("image"), (req, res, next) => {
       var upAndInProPath = proImgModel.find({ id: decoded.id });
       upAndInProPath
         .exec()
-        .then((data) => {
-          console.log("data", data.length);
-          if (data.length > 0) {
+        .then((dbdata) => {
+          // console.log("dataout", dbdata[0].imagePath);
+          if (dbdata.length > 0) {
+            console.log("data", dbdata);
+            console.log("dataout", dbdata[0].imagePath);
+            var oddimgname = dbdata[0].imagePath;
             // console.log(data[0].imagePath);
+            if (fs.existsSync(`public/${oddimgname}`)) {
+              fs.unlinkSync(`public/${oddimgname}`, (err) => {
+                if (err) {
+                  console.log(err);
+                  res.json({
+                    error: err,
+                  });
+                } else {
+                  console.log("Successfully deleted the file.");
+                }
+              });
+            }
 
             var updateprofile = proImgModel.findOneAndUpdate(
               { id: decoded.id },
               {
-                imagePath: "profileImg/" + imagepath,
+                imagePath: "profileImg/" + imageName,
               }
             );
-            console.log("image");
             updateprofile
               .then((data) => {
                 res.json({
@@ -137,7 +173,7 @@ route.post("/updateimg", upload.single("image"), (req, res, next) => {
             console.log("save image");
             var imagePath = new proImgModel({
               id: decoded.id,
-              imagePath: "profileImg/" + imagepath,
+              imagePath: "profileImg/" + imageName,
             });
             imagePath
               .save()

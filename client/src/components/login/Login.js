@@ -33,10 +33,8 @@ export default class Login extends Component {
       if (data.Messege) {
         alert(data.Messege);
         localStorage.setItem("token", data.Token);
+        this.setState({ redirect: "/profile" });
         window.location.reload();
-        if (localStorage.getItem("token")) {
-          this.setState({ redirect: "./AddPost" });
-        }
 
         // window.location.href = "/addpost";
       }
@@ -44,6 +42,7 @@ export default class Login extends Component {
     }
   }
   render() {
+    // console.log(this.state.redirect);
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect} />;
     }

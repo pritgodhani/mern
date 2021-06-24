@@ -18,25 +18,22 @@ route.post("/", (req, res, next) => {
   var username = req.body.username;
   var email = req.body.email;
   var password = req.body.password;
-  // console.log("username--");
-  // console.log("email--", email);
-  // console.log("password", password);
-  // console.log("data", req.body.forn);
-  // if(!username){
-  //   res.json({
-  //     error:'plese enter username(sr)'
-  //   })
-  // }
-  // if(!email){
-  //   res.json({
-  //     error:'plese enter email(sr)'
-  //   })
-  // }
-  // if(!password){
-  //   res.json({
-  //     error:'plese enter password(sr)'
-  //   })
-  // }
+
+  if (!username) {
+    res.json({
+      error: "plese enter username(sr)",
+    });
+  }
+  if (!email) {
+    res.json({
+      error: "plese enter email(sr)",
+    });
+  }
+  if (!password) {
+    res.json({
+      error: "plese enter password(sr)",
+    });
+  }
 
   bcrypt.hash(password, 10, (err, pass) => {
     // console.log("err", err);
@@ -62,9 +59,7 @@ route.post("/", (req, res, next) => {
         .catch((err) => {
           res.json({
             error:
-              err.code === 11000
-                ? "Email or username already in used"
-                : "Databse error!",
+              err.code === 11000 ? "Email already in used" : "Databse error!",
           });
         });
     }

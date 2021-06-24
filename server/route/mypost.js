@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
-const registerModel = require("../models/register");
-const profileModel = require("../models/profile");
+const fs = require("fs");
 const mypostModel = require("../models/mypost");
 const multer = require("multer");
 var storage = multer.diskStorage({
@@ -98,36 +97,36 @@ router.get("/", (req, res, next) => {
     }
   });
 });
-router.get("/username", (req, res, next) => {
-  var token = req.headers.authorization.split(" ")[1];
-  jwt.verify(token, "secret", (err, decode) => {
-    console.log("decode", decode.id);
-    if (err) {
-      console.log("err", err);
-      res.json({
-        error: err,
-        message: "punamepost jwt error",
-      });
-    }
-    if (decode) {
-      console.log("id", decode);
-      // console.log(decode.id);
-      var dbdata = registerModel.findById(id);
-      dbdata
-        .exec()
+router.post("/delete", (req, res, next) => {
+  var postid = req.body.id;
+  var dbData = mypostModel.findById(postid);
+  dbData
+    .exec()
+    .then((data) => {
+      var imgpath = data.postImg;
+      if (fs.existsSync(`public/${imgpath}`)) {
+        fs.unlinkSync(`public/${imgpath}`, (err) => {
+          console.log(err);
+        });
+      }
+      var deletePost = mypostModel.findByIdAndDelete(postid);
+      deletePost
         .then((data) => {
           res.json({
-            data: data,
+            message: "post deleted",
           });
         })
         .catch((err) => {
           res.json({
             error: err,
-            message: "gdbmypost error",
           });
         });
-    }
-  });
+    })
+    .catch((err) => {
+      res.json({
+        error: err,
+        message: "error from deletpost",
+      });
+    });
 });
-
 module.exports = router;

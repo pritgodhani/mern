@@ -2,8 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 function Logout() {
   let history = useHistory();
-  localStorage.removeItem("token");
-  localStorage.removeItem("peofileimg");
+  localStorage.clear();
   window.location.reload();
   history.push("/login");
   // window.location.href = "/login";

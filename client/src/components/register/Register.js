@@ -43,6 +43,7 @@ export default class Register extends Component {
         alert(data.error);
       } else {
         alert(data.message);
+
         this.setState({ redirect: "./login" });
         // window.location.href = "/login";
         // window.location.reload();

@@ -7,6 +7,7 @@ const register = require("./route/register");
 const login = require("./route/login");
 const profile = require("./route/profile");
 const mypost = require("./route/mypost");
+const allpost = require("./route/allPost");
 const formmodel = require("./models/formData");
 const app = express();
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use("/register", register);
 app.use("/login", login);
 app.use("/profile", profile);
 app.use("/mypost", mypost);
+app.use("/allpost", allpost);
 const CONECTION_URL = "mongodb://localhost/node-react-api";
 const PORT = process.env.PORT || 5000;
 

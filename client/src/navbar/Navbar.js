@@ -17,7 +17,7 @@ function Navbar() {
                   <div>
                     <button type="button" className="btn btn-white">
                       <Link className="text-body" to="/AddPost">
-                        AddPost
+                        AllPost
                       </Link>
                     </button>
                     <button type="button" className="btn btn-white">
