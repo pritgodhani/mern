@@ -11,8 +11,20 @@ var mypostSchema = mongoose.Schema({
     type: String,
     require: true,
   },
-  postImg: { type: String, require: false },
-  postTitle: { type: String, require: false },
+  userData: {
+    type: mongoose.Schema.Types.ObjectId,
+    require: true,
+    ref: "userData",
+    default: null,
+  },
+  postImg: {
+    type: String,
+    default: null,
+  },
+  postTitle: {
+    type: String,
+    default: null,
+  },
 
   date: {
     type: Date,

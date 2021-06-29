@@ -3,9 +3,9 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const mypostModel = require("../models/mypost");
 router.get("/", (req, res, next) => {
-  console.log("all");
+  // console.log("all");
   var token = req.headers.authorization.split(" ")[1];
-  console.log("token", token);
+  // console.log("token", token);
   jwt.verify(token, "secret", (err, decode) => {
     // console.log("decode", decode.id);
     if (err) {
@@ -17,10 +17,12 @@ router.get("/", (req, res, next) => {
     }
     if (decode) {
       console.log(decode);
+      console.log("vfjgvnflgbsuhvbsdvbsb");
       var dbdata = mypostModel.find({});
       dbdata
         .exec()
         .then((data) => {
+          console.log("adddata", data);
           res.json({
             data: data,
           });

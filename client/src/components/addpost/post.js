@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Axios from "axios";
 function Post(props) {
   const [dbData, setDbData] = useState(props.dbMypost);
   console.log(dbData);
@@ -11,22 +10,6 @@ function Post(props) {
   var peofileimg = dbData.userData.image;
   var username = dbData.userData.userName;
 
-  var deletePost = (e) => {
-    e.preventDefault();
-    var postId = dbData._id;
-    var deletePost = Axios.post("http://localhost:5000/mypost/delete", {
-      id: postId,
-    });
-    deletePost
-      .then((data) => {
-        console.log(data);
-        alert(data.data.message);
-        props.mypostdata();
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
-  };
   return (
     <>
       <div className="card " style={{ width: "300px" }}>
@@ -45,16 +28,6 @@ function Post(props) {
           className="card-img-top"
           alt="postimage"
         />
-        <div className="card-body">
-          <div>{title}</div>
-          <button
-            type="button"
-            className="btn-sm  btn-secondary"
-            onClick={(e) => deletePost(e)}
-          >
-            Delete
-          </button>
-        </div>
       </div>
     </>
   );

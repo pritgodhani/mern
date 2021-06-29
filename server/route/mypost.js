@@ -12,7 +12,7 @@ var storage = multer.diskStorage({
   },
 });
 const fileFilter = (req, file, cb) => {
-  console.log(file.mimetype);
+  // console.log(file.mimetype);
   if (
     file.mimetype === "image/png" ||
     file.mimetype === "image/jpeg" ||
@@ -44,8 +44,10 @@ router.post("/", uplod.single("image"), (req, res, next) => {
     }
     if (decode) {
       var userid = decode.id;
+
       var dbMypostobj = new mypostModel({
         id: userid,
+        userData: userid,
         postImg: `addpost/` + postImgname,
         postTitle: mypostTitle,
       });
@@ -54,10 +56,11 @@ router.post("/", uplod.single("image"), (req, res, next) => {
         .then((data) => {
           res.json({
             data: data,
-            message: "save",
+            message: "post upload",
           });
         })
         .catch((err) => {
+          console.log("err");
           res.json({
             error: err,
             message: "insert mypost error",
@@ -78,9 +81,9 @@ router.get("/", (req, res, next) => {
       });
     }
     if (decode) {
-      console.log("id", decode);
-      console.log(decode.id);
-      var dbdata = mypostModel.find({ id: decode.id });
+      // console.log("id", decode);
+      // console.log(decode.id);
+      var dbdata = mypostModel.find({ id: decode.id }).populate("userData");
       dbdata
         .exec()
         .then((data) => {
@@ -103,15 +106,17 @@ router.post("/delete", (req, res, next) => {
   dbData
     .exec()
     .then((data) => {
+      console.log("data", data.postImg);
       var imgpath = data.postImg;
       if (fs.existsSync(`public/${imgpath}`)) {
         fs.unlinkSync(`public/${imgpath}`, (err) => {
           console.log(err);
         });
       }
-      var deletePost = mypostModel.findByIdAndDelete(postid);
+      var deletePost = mypostModel.findByIdAndDelete({ _id: postid });
       deletePost
         .then((data) => {
+          console.log(data);
           res.json({
             message: "post deleted",
           });
@@ -123,6 +128,7 @@ router.post("/delete", (req, res, next) => {
         });
     })
     .catch((err) => {
+      console.log("err", err);
       res.json({
         error: err,
         message: "error from deletpost",

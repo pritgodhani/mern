@@ -5,11 +5,9 @@ function Mypost() {
   const [mypostimg, setMypostImg] = useState();
   const [posttitle, setPostTitle] = useState();
   const [dbmyposts, setDbMyPost] = useState([]);
-  const [userName, setUserName] = useState();
-  const [proImg, setProImg] = useState();
+
   useEffect(() => {
     mypostData();
-    uNmaeAndProfile();
   }, []);
   function mypostData() {
     var token = localStorage.getItem("token");
@@ -18,44 +16,18 @@ function Mypost() {
         Authorization: "Bearer " + token,
       },
     });
+
     getmypost
       .then((data) => {
-        setDbMyPost(data.data.data);
-        // console.log(data.data.data);
+        console.log("postData", data.data.data);
+        let dbPost = data.data.data;
+        setDbMyPost(dbPost);
       })
       .catch((err) => {
         console.log(err);
       });
   }
-  function uNmaeAndProfile() {
-    var token = localStorage.getItem("token");
-    var apiData = Axios.get("http://localhost:5000/profile", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
-    apiData
-      .then((value) => {
-        var dbObj = value.data.data;
 
-        var dbuserName = dbObj.userName;
-        setUserName(dbuserName);
-        var userid = dbObj._id;
-        var imgPath = Axios.post("http://localhost:5000/profile/imagepath", {
-          id: userid,
-        });
-        imgPath
-          .then((value) => {
-            setProImg(value.data.data.imagePath);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
   const handlerImage = (e) => {
     // console.log(e.target.files[0]);
     setMypostImg(e.target.files[0]);
@@ -82,6 +54,10 @@ function Mypost() {
       .then((data) => {
         if (data) {
           alert(data.data.message);
+          // console.log(data.data.message);
+          console.log(data.data);
+          // setMypostImg("");
+          setPostTitle("");
           mypostData();
         }
       })
@@ -91,11 +67,10 @@ function Mypost() {
           // alert(data.data.message);
         }
       });
-    // console.log(.ldata);
   };
-
+  // console.log("post id from mypoodt", postImgId );
   const postIten = dbmyposts.map((dbmypost) => (
-    <Post dataArry={dbmypost} uName={userName} pImg={proImg} />
+    <Post dbMypost={dbmypost} mypostdata={mypostData()} />
   ));
   return (
     <>
@@ -117,6 +92,7 @@ function Mypost() {
                     className="form-control"
                     id="floatingInput"
                     name="image"
+                    // value={mypostimg}
                     placeholder="image"
                     onChange={(e) => {
                       handlerImage(e);
@@ -128,6 +104,7 @@ function Mypost() {
                     type="text"
                     className="form-control"
                     id="title"
+                    value={posttitle}
                     name="title"
                     placeholder="titles"
                     onChange={(e) => {

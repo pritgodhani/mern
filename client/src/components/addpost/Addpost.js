@@ -1,58 +1,33 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import Post from "../mypost/Post";
+import Post from "./post";
 function Addpost() {
-  var [allPosts, setAllPost] = useState([]);
-  const [userName, setUserName] = useState();
-  const [proImg, setProImg] = useState();
-  useEffect(() => {
-    uNmaeAndProfile();
-    var token = localStorage.getItem("token");
-    var getAllPost = Axios.get("http://localhost:5000/allpost/", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
-    getAllPost
-      .then((data) => {
-        // console.log(data.data.data);
-        setAllPost(data.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-  function uNmaeAndProfile() {
-    var token = localStorage.getItem("token");
-    var apiData = Axios.get("http://localhost:5000/profile", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
-    apiData
-      .then((value) => {
-        var dbObj = value.data.data;
+  const [dbmyposts, setDbMyPost] = useState([]);
 
-        var dbuserName = dbObj.userName;
-        setUserName(dbuserName);
-        var userid = dbObj._id;
-        var imgPath = Axios.post("http://localhost:5000/profile/imagepath", {
-          id: userid,
-        });
-        imgPath
-          .then((value) => {
-            setProImg(value.data.data.imagePath);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+  useEffect(() => {
+    mypostData();
+  }, []);
+  function mypostData() {
+    var token = localStorage.getItem("token");
+    var getmypost = Axios.get("http://localhost:5000/allpost", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    getmypost
+      .then((data) => {
+        console.log("Add post", data.data.data);
+        let dbPost = data.data.data;
+        setDbMyPost(dbPost);
       })
       .catch((err) => {
         console.log(err);
       });
   }
-  const allItem = allPosts.map((allPost) => (
-    <Post dataArry={allPost} uName={userName} pImg={proImg} />
+
+  const allItem = dbmyposts.map((dbmypost) => (
+    <Post dbMypost={dbmypost} mypostdata={mypostData()} />
   ));
   return (
     <>
