@@ -19,7 +19,7 @@ function Mypost() {
 
     getmypost
       .then((data) => {
-        console.log("postData", data.data.data);
+        // console.log("postData", data.data.data);
         let dbPost = data.data.data;
         setDbMyPost(dbPost);
       })
@@ -70,7 +70,7 @@ function Mypost() {
   };
   // console.log("post id from mypoodt", postImgId );
   const postIten = dbmyposts.map((dbmypost) => (
-    <Post dbMypost={dbmypost} mypostdata={mypostData()} />
+    <Post dbMypost={dbmypost} mypostdata={mypostData} delete={true} />
   ));
   return (
     <>

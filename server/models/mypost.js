@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 mongoose.connect(
   "mongodb://localhost/node-react-api",
+  { useCreateIndex: true },
   { useNewUrlParser: true },
   { useUnifiedTopology: true },
   { useFindAndModify: true }
@@ -25,7 +26,19 @@ var mypostSchema = mongoose.Schema({
     type: String,
     default: null,
   },
-
+  postLike: [
+    {
+      postLikeUser: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "userData",
+        default: null,
+      },
+      like: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
   date: {
     type: Date,
     default: Date.now,

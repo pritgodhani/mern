@@ -16,9 +16,7 @@ router.get("/", (req, res, next) => {
       });
     }
     if (decode) {
-      console.log(decode);
-      console.log("vfjgvnflgbsuhvbsdvbsb");
-      var dbdata = mypostModel.find({});
+      var dbdata = mypostModel.find({}).populate("userData");
       dbdata
         .exec()
         .then((data) => {

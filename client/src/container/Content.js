@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../navbar/Navbar";
+import Navbar from "../components/navbar/Navbar";
 import Home from "../components/home/Home";
 import Addpost from "../components/addpost/Addpost";
 import Mypost from "../components/mypost/Mypost";

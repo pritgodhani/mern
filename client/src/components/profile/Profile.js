@@ -28,7 +28,7 @@ function Profile() {
         setProFilePath(dbuserProImg);
       })
       .catch((err) => {
-        console.log("get userdata error" + "</br>" + err);
+        console.log("get userdata error </br>" + err);
       });
   };
   const handlerChange = (e) => {

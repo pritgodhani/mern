@@ -62,7 +62,7 @@ route.post("/", upload.single("image"), (req, res, next) => {
   var fUsername = req.body.name;
   var fEmail = req.body.email;
   if (!req.file) {
-    console.log("only UN & E");
+    // console.log("only UN & E");
     jwt.verify(token, "secret", (err, decoded) => {
       if (err) {
         res.json({
@@ -103,7 +103,7 @@ route.post("/", upload.single("image"), (req, res, next) => {
         let deletOddProImg = registerModel.findById(decoded.id);
         deletOddProImg
           .then((data) => {
-            console.log("userdata", data);
+            // console.log("userdata", data);
             let oddimgname = data.image;
             if (fs.existsSync(`public/${oddimgname}`)) {
               fs.unlinkSync(`public/${oddimgname}`, (err) => {
@@ -112,7 +112,7 @@ route.post("/", upload.single("image"), (req, res, next) => {
                     error: err,
                   });
                 } else {
-                  console.log("Successfully deleted the file.");
+                  // console.log("Successfully deleted the file.");
                 }
               });
             }

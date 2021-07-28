@@ -7,7 +7,7 @@ function Navbar() {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-white">
-        <h4 className="text-body-50">navbar</h4>
+        <h4 className="text-body-50">instagram</h4>
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <div className="btn-group" role="group" aria-label="Basic example">

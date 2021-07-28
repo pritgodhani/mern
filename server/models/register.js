@@ -13,12 +13,12 @@ var registerSchema = mongoose.Schema({
   },
   email: {
     type: String,
-    require: true,
     unique: true,
+    require: true,
     match:
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
   },
-  password: { type: String, require: false },
+  password: { type: String, require: true },
   image: { type: String, default: null },
 
   date: {

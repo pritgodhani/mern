@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import Post from "./post";
+import Post from "../mypost/Post";
 function Addpost() {
   const [dbmyposts, setDbMyPost] = useState([]);
 
@@ -27,7 +27,7 @@ function Addpost() {
   }
 
   const allItem = dbmyposts.map((dbmypost) => (
-    <Post dbMypost={dbmypost} mypostdata={mypostData()} />
+    <Post dbMypost={dbmypost} mypostdata={mypostData} delete={false} />
   ));
   return (
     <>
@@ -36,7 +36,7 @@ function Addpost() {
           <div className="card-body">
             <div className="container mb-3">
               <div className="container mb-3" style={{ width: "auto" }}>
-                <h1>all Post</h1>
+                <h1>All Post</h1>
                 <div>{allItem}</div>
               </div>
             </div>

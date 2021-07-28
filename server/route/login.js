@@ -15,7 +15,7 @@ route.post("/", (req, res, next) => {
           error: "Auth failed 1",
         });
       } else {
-        console.log(data[0].password);
+        // console.log(data[0].password);
         // console.log(password);
 
         bcrypt.compare(password, data[0].password, (err, result) => {
