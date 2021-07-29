@@ -12,6 +12,7 @@ function Post(props) {
   // console.log("post data", dbData);
   // const [dbData, setDbData] = useState(props.dbMypost);
   const [likeBtn, setLikeBtn] = useState(false);
+  const [postLikeUser, serPostLikeUser] = useState(false);
   var img = dbData.postImg;
   var title = dbData.postTitle;
   var postId = dbData._id;
@@ -20,19 +21,28 @@ function Post(props) {
   useEffect(() => {
     getLikeBtnData();
   }, []);
-  async function getLikeBtnData() {
-    await Axios.get("http://localhost:5000/mypost/likePost", {
+  function getLikeBtnData() {
+    Axios.get(`http://localhost:5000/mypost/likePost?postid=${postId}`, {
       headers: {
-        Authorization: "Bearer " + token + " " + postId,
+        Authorization: "Bearer " + token,
       },
     })
       .then((data) => {
+        // console.log(data.data.likeUserId);
         let likeUserId = data.data.likeUserId;
-        var dbuserid = data.data.data.postLike.filter(function (item) {
-          return (item.id = likeUserId);
+        let postlikeArr = data.data.data.postLike;
+        let dbuserid = postlikeArr.filter(function (item) {
+          // console.log("fiterId", item.postLikeUserId);
+          return item.postLikeUserId === likeUserId;
         });
-        console.log("likseUserData", dbuserid[0].like);
+        // console.log("get like likseUserData", dbuserid);
         setLikeBtn(dbuserid[0].like);
+        // console.log("postlikeArr", postlikeArr);
+        let likeCounter = postlikeArr.filter((item) => {
+          return item.like === true;
+        });
+        serPostLikeUser(likeCounter);
+        // console.log("countervalu", likeCounter);
       })
       .catch((err) => {
         console.log("error", err);
@@ -47,16 +57,17 @@ function Post(props) {
     deletePost
       .then((data) => {
         // console.log(data);
-        alert(data.data.message);
+        // alert(data.data.message);
         props.mypostdata();
       })
       .catch((err) => {
         console.log("error", err);
       });
   };
+  // console.log("likeBtn", likeBtn);
   const likeBtnClicked = () => {
     var likeValue = !likeBtn;
-    console.log("cliked====>", likeValue);
+    // console.log("cliked====>", likeValue);
     var likePost = Axios.post(
       "http://localhost:5000/mypost/likePost",
       {
@@ -71,8 +82,9 @@ function Post(props) {
     );
     likePost
       .then((data) => {
+        // console.log(data.data);
         getLikeBtnData();
-        alert(data.data.message);
+        // alert(data.data.message);
       })
       .catch((err) => {
         console.log("error", err);
@@ -130,9 +142,12 @@ function Post(props) {
             {likeBtn === true ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </Button>
         </div>
-        <div className="card-body" style={{ margin: "-18px" }}>
-          {title}
-        </div>
+
+        {postLikeUser.length === 0 ? null : (
+          <div className="card-body" style={{ margin: "-18px" }}>
+            {postLikeUser.length}likes
+          </div>
+        )}
       </div>
     </>
   );

@@ -17,7 +17,7 @@ function Addpost() {
 
     getmypost
       .then((data) => {
-        console.log("Add post", data.data.data);
+        // console.log("Add post", data.data.data);
         let dbPost = data.data.data;
         setDbMyPost(dbPost);
       })

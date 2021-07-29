@@ -28,6 +28,10 @@ var mypostSchema = mongoose.Schema({
   },
   postLike: [
     {
+      postLikeUserId: {
+        type: String,
+        require: true,
+      },
       postLikeUser: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "userData",

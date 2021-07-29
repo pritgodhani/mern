@@ -33,7 +33,7 @@ export default class Login extends Component {
       if (data.Messege) {
         alert(data.Messege);
         localStorage.setItem("token", data.Token);
-        this.setState({ redirect: "/profile" });
+        this.setState({ redirect: "/AddPost" });
         window.location.reload();
 
         // window.location.href = "/addpost";

@@ -20,7 +20,7 @@ router.get("/", (req, res, next) => {
       dbdata
         .exec()
         .then((data) => {
-          console.log("adddata", data);
+          // console.log("adddata", data);
           res.json({
             data: data,
           });

@@ -134,7 +134,7 @@ router.post("/delete", (req, res, next) => {
 });
 router.get("/likePost", (req, res, next) => {
   var postL_UserToken = req.headers.authorization.split(" ")[1];
-  var postid = req.headers.authorization.split(" ")[2];
+  var postid = req.query.postid;
   // var postid = "610100515f973b33935dcc6f";
   jwt.verify(postL_UserToken, "secret", (err, decode) => {
     if (err) {
@@ -156,7 +156,7 @@ router.get("/likePost", (req, res, next) => {
           });
         })
         .catch((err) => {
-          // console.log("err", err);
+          console.log("like get backenderr", err);
           res.json({
             error: err,
             message: "error from likePost",
@@ -170,7 +170,7 @@ router.post("/likePost", (req, res, next) => {
   var newClicklike = req.body.like;
   // console.log(newClicklike);
   var postL_UserToken = req.headers.authorization.split(" ")[1];
-
+  console.log("token user Q=====>", postL_UserToken);
   jwt.verify(postL_UserToken, "secret", async (err, decode) => {
     if (err) {
       console.log("err", err);
@@ -182,14 +182,33 @@ router.post("/likePost", (req, res, next) => {
     if (decode) {
       var likePost = await mypostModel.findById(postid);
       let ArratUserIndex = likePost.postLike.findIndex((item) => {
-        // console.log("filter item", item.postLikeUser);
-
-        return (item.postLikeUser = decode.id);
+        console.log("findIndex_item", typeof item.postLikeUserId);
+        return item.postLikeUserId === decode.id;
       });
+      let ArratUserData = likePost.postLike.filter((item) => {
+        // console.log("filter_item", item.postLikeUser);
+        return item.postLikeUserId === decode.id;
+      });
+      // console.log("================================================");
+      // console.log("likePost", likePost);
+      // console.log("******************************");
+      // console.log("token_decode_id", typeof decode.id);
+      // console.log("******************************");
+      // console.log("postId=>", postid);
+      // console.log("******************************");
       // console.log("dublidatId=>", ArratUserIndex);
-      if (-1 < ArratUserIndex) {
+      // console.log("******************************");
+      // console.log("ArratUserData=>", ArratUserData);
+      // console.log("******************************");
+      // console.log("ArratUserDataBoolean=>", Boolean(ArratUserData));
+      // console.log("******************************");
+      // console.log("newClicklike=>", newClicklike);
+      // console.log("******************************");
+      if (ArratUserData.length > 0) {
+        console.log("newClicklikeIn=>", newClicklike);
         // console.log("dupData", likePost.postLike[ArratUserIndex]);
         likePost.postLike[ArratUserIndex].like = newClicklike;
+        // console.log("test......");
         likePost
           .save()
           .then((data) => {
@@ -199,13 +218,18 @@ router.post("/likePost", (req, res, next) => {
             });
           })
           .catch((err) => {
-            // console.log("post mrthod like error=>", err);
+            console.log("post mrthod like error=>", err);
             res.json({
               error: err,
             });
           });
       } else {
-        likePost.postLike.push({ postLikeUser: decode.id, like: newClicklike });
+        console.log("else part");
+        likePost.postLike.push({
+          postLikeUserId: decode.id,
+          postLikeUser: decode.id,
+          like: newClicklike,
+        });
         likePost
           .save()
           .then((data) => {
@@ -215,7 +239,7 @@ router.post("/likePost", (req, res, next) => {
             });
           })
           .catch((err) => {
-            // console.log("post mrthod like error=>", err);
+            console.log("post mrthod like error=>", err);
             res.json({
               error: err,
             });
