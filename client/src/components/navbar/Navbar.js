@@ -21,6 +21,11 @@ function Navbar() {
                       </Link>
                     </button>
                     <button type="button" className="btn btn-white">
+                      <Link className="text-body" to="/Chat">
+                        Chat
+                      </Link>
+                    </button>
+                    <button type="button" className="btn btn-white">
                       <Link className="text-body" to="/MyPost">
                         MyPost
                       </Link>

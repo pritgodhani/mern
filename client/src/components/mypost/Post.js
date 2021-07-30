@@ -12,7 +12,8 @@ function Post(props) {
   // console.log("post data", dbData);
   // const [dbData, setDbData] = useState(props.dbMypost);
   const [likeBtn, setLikeBtn] = useState(false);
-  const [postLikeUser, serPostLikeUser] = useState(false);
+  const [postLikeUser, serPostLikeUser] = useState([]);
+  console.log("postlikeusrdata", postLikeUser);
   var img = dbData.postImg;
   var title = dbData.postTitle;
   var postId = dbData._id;
@@ -29,6 +30,7 @@ function Post(props) {
     })
       .then((data) => {
         // console.log(data.data.likeUserId);
+        console.log(data.data.data.postLike);
         let likeUserId = data.data.likeUserId;
         let postlikeArr = data.data.data.postLike;
         let dbuserid = postlikeArr.filter(function (item) {
@@ -38,10 +40,10 @@ function Post(props) {
         // console.log("get like likseUserData", dbuserid);
         setLikeBtn(dbuserid[0].like);
         // console.log("postlikeArr", postlikeArr);
-        let likeCounter = postlikeArr.filter((item) => {
+        let postLikeUserdata = postlikeArr.filter((item) => {
           return item.like === true;
         });
-        serPostLikeUser(likeCounter);
+        serPostLikeUser(postLikeUserdata);
         // console.log("countervalu", likeCounter);
       })
       .catch((err) => {
@@ -142,12 +144,9 @@ function Post(props) {
             {likeBtn === true ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </Button>
         </div>
-
-        {postLikeUser.length === 0 ? null : (
-          <div className="card-body" style={{ margin: "-18px" }}>
-            {postLikeUser.length}likes
-          </div>
-        )}
+        <div className="card-body" style={{ margin: "-18px" }}>
+          {postLikeUser.length === 0 ? null : `${postLikeUser.length}likes`}
+        </div>
       </div>
     </>
   );

@@ -8,6 +8,7 @@ import Login from "../components/login/Login";
 import Register from "../components/register/Register";
 import NF from "../components/notfountpage/Notfountpage";
 import Logout from "../components/logout/Logout";
+import Chat from "../components/chat/Chat";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 function Content() {
@@ -32,6 +33,15 @@ function Content() {
             {(() => {
               if (lToken) {
                 return <Addpost />;
+              } else {
+                return <NF />;
+              }
+            })()}
+          </Route>
+          <Route path="/Chat">
+            {(() => {
+              if (lToken) {
+                return <Chat />;
               } else {
                 return <NF />;
               }
@@ -64,6 +74,7 @@ function Content() {
               }
             })()}
           </Route>
+
           <Route path="/logout">
             {(() => {
               if (lToken) {

@@ -182,28 +182,13 @@ router.post("/likePost", (req, res, next) => {
     if (decode) {
       var likePost = await mypostModel.findById(postid);
       let ArratUserIndex = likePost.postLike.findIndex((item) => {
-        console.log("findIndex_item", typeof item.postLikeUserId);
         return item.postLikeUserId === decode.id;
       });
       let ArratUserData = likePost.postLike.filter((item) => {
         // console.log("filter_item", item.postLikeUser);
         return item.postLikeUserId === decode.id;
       });
-      // console.log("================================================");
-      // console.log("likePost", likePost);
-      // console.log("******************************");
-      // console.log("token_decode_id", typeof decode.id);
-      // console.log("******************************");
-      // console.log("postId=>", postid);
-      // console.log("******************************");
-      // console.log("dublidatId=>", ArratUserIndex);
-      // console.log("******************************");
-      // console.log("ArratUserData=>", ArratUserData);
-      // console.log("******************************");
-      // console.log("ArratUserDataBoolean=>", Boolean(ArratUserData));
-      // console.log("******************************");
-      // console.log("newClicklike=>", newClicklike);
-      // console.log("******************************");
+
       if (ArratUserData.length > 0) {
         console.log("newClicklikeIn=>", newClicklike);
         // console.log("dupData", likePost.postLike[ArratUserIndex]);

@@ -1,6 +1,7 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 mongoose.connect(
-  "mongodb://localhost/node-react-api",
+  process.env.DB_CONNESTION_URL,
   { useCreateIndex: true },
   { useNewUrlParser: true },
   { useUnifiedTopology: true },
