@@ -7,13 +7,9 @@ export default function Chat() {
   return (
     <>
       <div>
-        <div className="frd">
-          <Frd />
-        </div>
+        <div className="frd"></div>
         <div className="chatDIV">
-          <Container maxWidth="sm">
-            <Frd />
-          </Container>
+          <Container maxWidth="sm"></Container>
         </div>
       </div>
     </>
