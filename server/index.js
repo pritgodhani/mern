@@ -23,13 +23,13 @@ app.use("/allpost", allpost);
 const CONECTION_URL = "mongodb://localhost/node-react-api";
 const PORT = process.env.PORT || 5000;
 
-async () =>
-  await mongoose.connect(CONECTION_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: true,
-    useCreateIndex: true,
-  });
+// async () =>
+//   await mongoose.connect(CONECTION_URL, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useFindAndModify: true,
+//     useCreateIndex: true,
+//   });
 
 app.listen(PORT, () => console.log(`server runing port is: ${PORT}`));
 

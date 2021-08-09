@@ -1,13 +1,5 @@
-require("dotenv").config();
 const mongoose = require("mongoose");
-mongoose.connect(
-  process.env.DB_CONNESTION_URL,
-  { useCreateIndex: true },
-  { useNewUrlParser: true },
-  { useUnifiedTopology: true },
-  { useFindAndModify: true }
-);
-
+const connection = require("../connection/connection");
 var mypostSchema = mongoose.Schema({
   id: {
     type: String,

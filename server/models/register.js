@@ -1,11 +1,5 @@
-require("dotenv").config();
 const mongoose = require("mongoose");
-mongoose.connect(
-  process.env.DB_CONNESTION_URL,
-  { useNewUrlParser: true },
-  { useUnifiedTopology: true },
-  { useFindAndModify: true }
-);
+const connection = require("../connection/connection");
 
 var registerSchema = mongoose.Schema({
   userName: {
