@@ -18,7 +18,7 @@ const connection = mongoose
     { useFindAndModify: true }
   )
   .then((result) => {
-    // console.log("connection successfily");
+    console.log("connection successfily");
   })
   .catch((err) => {
     console.log("connection err", err);
