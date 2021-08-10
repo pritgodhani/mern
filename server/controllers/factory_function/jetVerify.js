@@ -5,11 +5,11 @@ exports.jwtVerify = (token) => {
 
   return jwt.verify(token, "secret", function (err, decoded) {
     if (err) {
-      console.log("errfcededed", err);
-      return err;
+      // console.log("jet");
+      throw err;
     }
     if (decoded) {
-      console.log("resposns jwt", decoded);
+      // console.log("resposns jwt", decoded);
       return decoded;
     }
   });

@@ -51,7 +51,7 @@ function Post(props) {
         // console.log("countervalu", likeCounter);
       })
       .catch((err) => {
-        console.log("error", "err");
+        console.log("error", err);
       });
   }
   var deletePost = (e) => {

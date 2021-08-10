@@ -60,7 +60,7 @@ function Profile() {
       })
       .then(function (response) {
         if (response.data.error) {
-          // console.log("response.data.error", response.data);
+          console.log("response.data.error", response);
           alert(response.data.error);
         }
         if (response.data.data) {

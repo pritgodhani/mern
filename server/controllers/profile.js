@@ -1,130 +1,122 @@
 var jwt = require("jsonwebtoken");
 const registerModel = require("../models/register");
 var fs = require("fs");
-const { jwtVerify } = require("./jwt/jetVerify");
+const { jwtVerify } = require("./factory_function/jetVerify");
 exports.profileGET = async (req, res, next) => {
   let token = req.headers.authorization.split(" ")[1];
-  // console.log("jwtVerify", jwtVerify("token"));
-  // // console.log("token", token);
-  let userdwdedwqid = jwtVerify(token);
-  console.log("function jwt", userdwdedwqid);
-  jwt.verify(token, "secret", function (err, decoded) {
-    if (err) {
-      res.json({
-        error: "token decord error",
+  try {
+    let decoded = jwtVerify(token);
+    console.log("function jwt", decoded.id);
+    let dbData = registerModel.findById(decoded.id);
+    dbData
+      .exec()
+      .then((data) => {
+        res.json({
+          data: data,
+        });
+      })
+      .catch((err) => {
+        res.json({
+          error: err,
+        });
       });
-    }
-    if (decoded) {
-      var dbData = registerModel.findById(decoded.id);
-      dbData
-        .exec()
+  } catch (error) {
+    res.json({
+      error: error,
+    });
+    // console.log("error   vgreafvnsef", error);
+  }
+};
+exports.profilePOST = (req, res, next) => {
+  let token = req.headers.authorization.split(" ")[1];
+  let fUsername = req.body.name;
+  let fEmail = req.body.email;
+  // console.log("postprofile", token, fUsername, fEmail, req.file);
+  if (!req.file) {
+    console.log("if");
+    // console.log("only UN & E");
+    try {
+      let decoded = jwtVerify(token);
+      let registerDataUpdate = registerModel.findByIdAndUpdate(decoded.id, {
+        userName: fUsername,
+        email: fEmail,
+      });
+      registerDataUpdate
         .then((data) => {
           res.json({
+            message: "updated",
             data: data,
           });
         })
         .catch((err) => {
+          console.log("try error", err);
           res.json({
             error: err,
           });
         });
+    } catch (error) {
+      console.log("catch error", error);
+      res.json({
+        error: error,
+      });
     }
-  });
-};
-exports.profilePOST = (req, res, next) => {
-  var token = req.headers.authorization.split(" ")[1];
-  var fUsername = req.body.name;
-  var fEmail = req.body.email;
-  // console.log("postprofile", token, fUsername, fEmail, req.file);
-  if (!req.file) {
-    // console.log("only UN & E");
-    jwt.verify(token, "secret", (err, decoded) => {
-      if (err) {
-        res.json({
-          error: err,
-          message: "jwt error",
-        });
-      }
-
-      if (decoded) {
-        let registerDataUpdate = registerModel.findByIdAndUpdate(decoded.id, {
-          userName: fUsername,
-          email: fEmail,
-        });
-        registerDataUpdate
-          .then((data) => {
-            res.json({
-              message: "updated",
-              data: data,
-            });
-          })
-          .catch((err) => {
-            res.json({
-              error: err,
-            });
-          });
-      }
-    });
   } else {
-    var imageName = req.file.filename;
-    console.log("else", imageName, token);
-    jwt.verify(token, "secret", (err, decoded) => {
-      if (err) {
-        res.json({
-          error: err,
-          message: "jwt error",
-        });
-      }
-      if (decoded) {
-        // console.log("id", decoded.id);
-        let deletOddProImg = registerModel.findById(decoded.id);
-        deletOddProImg
-          .then((data) => {
-            // console.log("userdata", data);
-            let oddimgname = data.image;
-            if (fs.existsSync(`public/${oddimgname}`)) {
-              fs.unlinkSync(`public/${oddimgname}`, (err) => {
-                if (err) {
-                  res.json({
-                    error: err,
-                  });
-                } else {
-                  // console.log("Successfully deleted the file.");
-                }
-              });
-            }
-            let registerDataUpdate = registerModel.findByIdAndUpdate(
-              { _id: decoded.id },
-              {
-                userName: fUsername,
-                email: fEmail,
-                image: "profileImg/" + imageName,
+    try {
+      let imageName = req.file.filename;
+      let decoded = jwtVerify(token);
+      // console.log("else", imageName, token);
+      let deletOddProImg = registerModel.findById(decoded.id);
+      deletOddProImg
+        .then((data) => {
+          // console.log("userdata", data);
+          let oddimgname = data.image;
+          if (fs.existsSync(`public/${oddimgname}`)) {
+            fs.unlinkSync(`public/${oddimgname}`, (err) => {
+              if (err) {
+                res.json({
+                  error: err,
+                });
+              } else {
+                // console.log("Successfully deleted the file.");
               }
-            );
-            registerDataUpdate
-              .then((data) => {
-                res.json({
-                  message: "updated",
-                  data: data,
-                });
-              })
-              .catch((err) => {
-                res.json({
-                  error:
-                    err.code === 11000
-                      ? "Email already in used"
-                      : "Databse error!",
-                });
-              });
-          })
-          .catch((err) => {
-            // console.log(err);
-            res.json({
-              error: err,
-              Message: "pid error",
             });
+          }
+          let registerDataUpdate = registerModel.findByIdAndUpdate(
+            { _id: decoded.id },
+            {
+              userName: fUsername,
+              email: fEmail,
+              image: "profileImg/" + imageName,
+            }
+          );
+          registerDataUpdate
+            .then((data) => {
+              res.json({
+                message: "updated",
+                data: data,
+              });
+            })
+            .catch((err) => {
+              res.json({
+                error:
+                  err.code === 11000
+                    ? "Email already in used"
+                    : "Databse error!",
+              });
+            });
+        })
+        .catch((err) => {
+          // console.log("else pRt", err);
+          res.json({
+            error: err,
+            Message: "pid error",
           });
-      }
-    });
+        });
+    } catch (error) {
+      // console.log("end error", error);
+      res.json({
+        error: error,
+      });
+    }
   }
 };
