@@ -1,6 +1,8 @@
 const registerModel = require("../models/register");
 const bcrypt = require("bcrypt");
-exports.registerGET = async (req, res, next) => {
+const jwt = require("jsonwebtoken");
+
+exports.registerGET = (req, res, next) => {
   var data = registerModel.find({});
   data
     .exec()
@@ -32,7 +34,7 @@ exports.registerPOST = async (req, res, next) => {
     });
   }
 
-  bcrypt.hash(password, 10, (err, pass) => {
+  await bcrypt.hash(password, 10, (err, pass) => {
     // console.log("err", err);
     // console.log("pass", pass);
     if (err) {
@@ -61,4 +63,47 @@ exports.registerPOST = async (req, res, next) => {
         });
     }
   });
+};
+exports.Login = (req, res, next) => {
+  var email = req.body.email;
+  var password = req.body.password;
+  var registerDb = registerModel.find({ email: email });
+  registerDb
+    .exec()
+    .then((data) => {
+      if (data.length < 1) {
+        res.json({
+          error: "Auth failed 1",
+        });
+      } else {
+        // console.log(data[0].password);
+        // console.log(password);
+
+        bcrypt.compare(password, data[0].password, (err, result) => {
+          // error part
+          if (err) {
+            res.json({
+              error: "auth failed 2",
+            });
+          }
+          //  result = true
+          if (result) {
+            var token = jwt.sign({ id: data[0]._id }, "secret");
+            res.status(200).json({
+              Messege: "success",
+              Token: token,
+            });
+          } else {
+            res.json({
+              error: "auth failed 3",
+            });
+          }
+        });
+      }
+    })
+    .catch((err) => {
+      res.json({
+        error: err,
+      });
+    });
 };

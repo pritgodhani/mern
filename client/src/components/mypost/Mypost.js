@@ -55,7 +55,7 @@ function Mypost() {
         if (data) {
           alert(data.data.message);
           // console.log(data.data.message);
-          console.log(data.data);
+          // console.log(data.data);
           // setMypostImg("");
           setPostTitle("");
           mypostData();
@@ -69,8 +69,13 @@ function Mypost() {
       });
   };
   // console.log("post id from mypoodt", postImgId );
-  const postIten = dbmyposts.map((dbmypost) => (
-    <Post dbMypost={dbmypost} mypostdata={mypostData} delete={true} />
+  const postIten = dbmyposts.map((dbmypost, index) => (
+    <Post
+      key={index}
+      dbMypost={dbmypost}
+      mypostdata={mypostData}
+      delete={true}
+    />
   ));
   return (
     <>

@@ -1,5 +1,5 @@
 const express = require("express");
-const creactErrror = require("http-errors");
+// const creactErrror = require("http-errors");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const posts = require("./route/posts");
@@ -33,21 +33,21 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`server runing port is: ${PORT}`));
 
-app.use((req, res, next) => {
-  next(creactErrror(404));
-});
-app.use((err, req, res, next) => {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+// app.use((req, res, next) => {
+//   next(creactErrror(404));
+// });
+// app.use((err, req, res, next) => {
+//   // set locals, only providing error in development
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  //   res.render('error');
-  res.status(404).json({
-    error: "page not found",
-  });
-  res.status(500).json({
-    error: "internal server error",
-  });
-});
+//   // render the error page
+//   res.status(err.status || 500);
+//   //   res.render('error');
+//   res.status(404).json({
+//     error: "page not found",
+//   });
+//   res.status(500).json({
+//     error: "internal server error",
+//   });
+// });

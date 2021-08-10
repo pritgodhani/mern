@@ -60,6 +60,7 @@ function Profile() {
       })
       .then(function (response) {
         if (response.data.error) {
+          // console.log("response.data.error", response.data);
           alert(response.data.error);
         }
         if (response.data.data) {
@@ -68,8 +69,8 @@ function Profile() {
         }
       })
       .catch(function (error) {
-        // console.log(error);
-        alert(error.massege);
+        console.log("error", error);
+        // alert(error.massege);
       });
   };
 

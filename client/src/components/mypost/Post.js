@@ -13,9 +13,13 @@ function Post(props) {
   // const [dbData, setDbData] = useState(props.dbMypost);
   const [likeBtn, setLikeBtn] = useState(false);
   const [postLikeUser, serPostLikeUser] = useState([]);
-  console.log("postlikeusrdata", postLikeUser);
+  // console.log("postlikeusrdata", postLikeUser);
   var img = dbData.postImg;
-  var title = dbData.postTitle;
+  if (dbData.postTitle) {
+    var title = "";
+  } else {
+    var title = dbData.postTitle;
+  }
   var postId = dbData._id;
   var peofileimg = dbData.userData.image;
   var username = dbData.userData.userName;
@@ -30,7 +34,7 @@ function Post(props) {
     })
       .then((data) => {
         // console.log(data.data.likeUserId);
-        console.log(data.data.data.postLike);
+        // console.log(data.data.data.postLike);
         let likeUserId = data.data.likeUserId;
         let postlikeArr = data.data.data.postLike;
         let dbuserid = postlikeArr.filter(function (item) {
@@ -47,7 +51,7 @@ function Post(props) {
         // console.log("countervalu", likeCounter);
       })
       .catch((err) => {
-        console.log("error", err);
+        console.log("error", "err");
       });
   }
   var deletePost = (e) => {

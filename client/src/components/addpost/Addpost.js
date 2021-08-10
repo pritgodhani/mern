@@ -26,8 +26,13 @@ function Addpost() {
       });
   }
 
-  const allItem = dbmyposts.map((dbmypost) => (
-    <Post dbMypost={dbmypost} mypostdata={mypostData} delete={false} />
+  const allItem = dbmyposts.map((dbmypost, index) => (
+    <Post
+      key={index}
+      dbMypost={dbmypost}
+      mypostdata={mypostData}
+      delete={false}
+    />
   ));
   return (
     <>

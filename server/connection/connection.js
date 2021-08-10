@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const dbLiveConnection = require("../mongodbLiveAPI/connectionApi");
 const dbLocalCanection = process.env.DB_CONNESTION_URL;
-console.log("API", dbLiveConnection);
+// console.log("API", dbLiveConnection);
 if (dbLiveConnection) {
   var conect = dbLiveConnection;
 } else {
@@ -18,7 +18,7 @@ const connection = mongoose
     { useFindAndModify: true }
   )
   .then((result) => {
-    console.log("connection successfily");
+    // console.log("connection successfily");
   })
   .catch((err) => {
     console.log("connection err", err);

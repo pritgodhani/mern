@@ -5,7 +5,7 @@ const registerModel = require("../models/register");
 const {
   registerGET,
   registerPOST,
-} = require("../controllers/registerControllers");
+} = require("../controllers/registerANDlogin");
 route.get("/", registerGET);
 route.post("/", registerPOST);
 module.exports = route;
