@@ -10,13 +10,12 @@ if (dbLiveConnection) {
   var conect = dbLocalCanection;
 }
 const connection = mongoose
-  .connect(
-    conect,
-    { useCreateIndex: true },
-    { useNewUrlParser: true },
-    { useUnifiedTopology: true },
-    { useFindAndModify: true }
-  )
+  .connect(conect, {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then((result) => {
     console.log("connection successfily");
   })

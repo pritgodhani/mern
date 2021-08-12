@@ -44,7 +44,7 @@ export default class Register extends Component {
       } else {
         alert(data.message);
 
-        this.setState({ redirect: "./login" });
+        this.setState({ redirect: "./" });
         // window.location.href = "/login";
         // window.location.reload();
       }
@@ -126,7 +126,7 @@ export default class Register extends Component {
           <div>
             <p className="text-justify">
               Have an account?
-              <Link to="/login">login</Link>
+              <Link to="/">login</Link>
             </p>
           </div>
         </div>

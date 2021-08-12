@@ -13,104 +13,33 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 function Content() {
   const lToken = localStorage.getItem("token");
-  if (lToken) {
-  }
+
   return (
     <>
-      <BrowserRouter>
-        <Navbar />
-        <Switch>
-          <Route exact path="/">
-            {(() => {
-              if (lToken) {
-                return <NF />;
-              } else {
-                return <Home />;
-              }
-            })()}
-          </Route>
-          <Route path="/AddPost">
-            {(() => {
-              if (lToken) {
-                return <Addpost />;
-              } else {
-                return <NF />;
-              }
-            })()}
-          </Route>
-          <Route path="/Chat">
-            {(() => {
-              if (lToken) {
-                return <Chat />;
-              } else {
-                return <NF />;
-              }
-            })()}
-          </Route>
-          <Route path="/MyPost">
-            {(() => {
-              if (lToken) {
-                return <Mypost />;
-              } else {
-                return <NF />;
-              }
-            })()}
-          </Route>
-          <Route path="/profile">
-            {(() => {
-              if (lToken) {
-                return <Profile />;
-              } else {
-                return <NF />;
-              }
-            })()}
-          </Route>
-          <Route path="/login">
-            {(() => {
-              if (lToken) {
-                return <NF />;
-              } else {
-                return <Login />;
-              }
-            })()}
-          </Route>
-
-          <Route path="/logout">
-            {(() => {
-              if (lToken) {
-                return <Logout />;
-              } else {
-                return <NF />;
-              }
-            })()}
-          </Route>
-          {/* {(() => {
-            if (lToken) {
-              return (
-                <Route path="/logout">
-                  <Logout />
-                </Route>
-              );
-            } else {
-              return (
-                <Route path="/login">
-                  <Login />
-                </Route>
-              );
-            }
-          })()} */}
-
-          <Route path="/regster">
-            {(() => {
-              if (lToken) {
-                return <NF />;
-              } else {
-                return <Register />;
-              }
-            })()}
-          </Route>
-        </Switch>
-      </BrowserRouter>
+      <Navbar />
+      <Switch>
+        {lToken ? (
+          <>
+            <Route path="/AddPost" exact component={Addpost} />
+            <Route path="/Chat" exact component={Chat} />
+            <Route path="/MyPost" exact component={Mypost} />
+            <Route path="/profile" exact component={Profile} />
+            <Route path="/logout" exact component={Logout} />
+            <Route path="/AddPost/*" component={NF} />
+            <Route path="/Chat/*" component={NF} />
+            <Route path="/MyPost/*" component={NF} />
+            <Route path="/profile/*" component={NF} />
+            <Route path="/logout/*" component={NF} />
+          </>
+        ) : (
+          <>
+            <Route path="/" exact component={Login} />
+            <Route path="/regster" exact component={Register} />
+            <Route path="/regster/*" component={NF} />
+            {/* <Route path="/*" component={NF} /> */}
+          </>
+        )}
+      </Switch>
     </>
   );
 }

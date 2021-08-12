@@ -35,21 +35,20 @@ function Navbar() {
                         Profiley
                       </Link>
                     </button>
+                    <button type="button" className="btn btn-white">
+                      <Link className="text-body" to="/logout">
+                        Logout
+                      </Link>
+                    </button>
                   </div>
                 );
               } else {
-                return (
-                  <button type="button" className="btn btn-white">
-                    <Link className="text-body" to="/">
-                      Home
-                    </Link>
-                  </button>
-                );
+                return <Link className="text-body" to="/"></Link>;
               }
             })()}
           </div>
 
-          <div className="">
+          {/* <div className="">
             {(() => {
               if (token) {
                 return (
@@ -69,7 +68,7 @@ function Navbar() {
                 );
               }
             })()}
-          </div>
+          </div> */}
         </div>
       </nav>
     </>

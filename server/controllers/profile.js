@@ -6,7 +6,7 @@ exports.profileGET = async (req, res, next) => {
   let token = req.headers.authorization.split(" ")[1];
   try {
     let decoded = jwtVerify(token);
-    console.log("function jwt", decoded.id);
+    // console.log("function jwt", decoded.id);
     let dbData = registerModel.findById(decoded.id);
     dbData
       .exec()
