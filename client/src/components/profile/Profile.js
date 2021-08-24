@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function Profile() {
   const [name, setName] = useState();
@@ -61,16 +62,16 @@ function Profile() {
       .then(function (response) {
         if (response.data.error) {
           console.log("response.data.error", response);
-          alert(response.data.error);
+          toast.error(response.data.error);
         }
         if (response.data.data) {
-          alert("update succesfuly");
+          toast.info("update succesfuly");
           getUserData();
         }
       })
       .catch(function (error) {
         console.log("error", error);
-        // alert(error.massege);
+        // toast.error(error.massege);
       });
   };
 

@@ -8,10 +8,29 @@ const login = require("./route/login");
 const profile = require("./route/profile");
 const mypost = require("./route/mypost");
 const allpost = require("./route/allPost");
+const allUserChat = require("./route/chat");
 const formmodel = require("./models/formData");
 const app = express();
-app.use(express.json());
 
+const socketio = require("socket.io");
+
+const http = require("http");
+const server = http.createServer(app);
+//
+//
+//
+const io = socketio(server, { cors: { origin: "*" } });
+io.on("connection", (socket) => {
+  console.log("socketio conneced!!");
+  socket.on("desconnection", () => {
+    console.log("user disconnected");
+  });
+});
+//
+//
+//
+//
+app.use(express.json());
 app.use(cors());
 app.use(express.static("public"));
 app.use("/form", posts);
@@ -20,6 +39,7 @@ app.use("/login", login);
 app.use("/profile", profile);
 app.use("/mypost", mypost);
 app.use("/allpost", allpost);
+app.use("/allUser", allUserChat);
 const CONECTION_URL = "mongodb://localhost/node-react-api";
 const PORT = process.env.PORT || 5000;
 
@@ -30,9 +50,7 @@ const PORT = process.env.PORT || 5000;
 //     useFindAndModify: true,
 //     useCreateIndex: true,
 //   });
-
-app.listen(PORT, () => console.log(`server runing port is: ${PORT}`));
-
+server.listen(PORT, () => console.log(`server runing port is: ${PORT}`));
 // app.use((req, res, next) => {
 //   next(creactErrror(404));
 // });

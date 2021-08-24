@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
+import { toast } from "react-toastify";
 export default class Register extends Component {
   constructor() {
     super();
@@ -22,15 +23,15 @@ export default class Register extends Component {
     e.preventDefault();
     // const formdata = new FormData();
     if (!this.state.name) {
-      alert("plses enter the name");
+      toast.error("plses enter the name");
     } else if (!this.state.email) {
-      alert("plses enter the email");
+      toast.error("plses enter the email");
     } else if (!this.state.password) {
-      alert("plses enter the password");
+      toast.error("plses enter the password");
     } else if (!this.state.cpassword) {
-      alert("plses enter the confirm password");
+      toast.error("plses enter the confirm password");
     } else if (!(this.state.cpassword === this.state.password)) {
-      alert("password not a match");
+      toast.error("password not a match");
     } else {
       // http://localhost:5000/register
 
@@ -40,9 +41,9 @@ export default class Register extends Component {
         password: this.state.password,
       });
       if (data.error) {
-        alert(data.error);
+        toast.error(data.error);
       } else {
-        alert(data.message);
+        toast.info(data.message);
 
         this.setState({ redirect: "./" });
         // window.location.href = "/login";

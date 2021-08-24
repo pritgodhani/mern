@@ -5,6 +5,7 @@ import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Button from "@material-ui/core/Button";
 import "./post.css";
+import { toast } from "react-toastify";
 
 function Post(props) {
   var token = localStorage.getItem("token");
@@ -15,10 +16,11 @@ function Post(props) {
   const [postLikeUser, serPostLikeUser] = useState([]);
   // console.log("postlikeusrdata", postLikeUser);
   var img = dbData.postImg;
+
   if (dbData.postTitle) {
     var title = "";
   } else {
-    var title = dbData.postTitle;
+    title = dbData.postTitle;
   }
   var postId = dbData._id;
   var peofileimg = dbData.userData.image;
@@ -41,8 +43,8 @@ function Post(props) {
           // console.log("fiterId", item.postLikeUserId);
           return item.postLikeUserId === likeUserId;
         });
-        // console.log("get like likseUserData", dbuserid);
-        setLikeBtn(dbuserid[0].like);
+        // console.log("get like likseUserData", dbuserid[0]?.like);
+        setLikeBtn(dbuserid[0]?.like);
         // console.log("postlikeArr", postlikeArr);
         let postLikeUserdata = postlikeArr.filter((item) => {
           return item.like === true;
@@ -63,10 +65,11 @@ function Post(props) {
     deletePost
       .then((data) => {
         // console.log(data);
-        // alert(data.data.message);
+        toast.info(data.data.message);
         props.mypostdata();
       })
       .catch((err) => {
+        toast.error(err);
         console.log("error", err);
       });
   };
@@ -90,7 +93,7 @@ function Post(props) {
       .then((data) => {
         // console.log(data.data);
         getLikeBtnData();
-        // alert(data.data.message);
+        // toast.error(data.data.message);
       })
       .catch((err) => {
         console.log("error", err);

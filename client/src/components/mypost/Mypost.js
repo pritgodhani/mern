@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Post from "./Post";
 import Axios from "axios";
+import { toast } from "react-toastify";
 function Mypost() {
   const [mypostimg, setMypostImg] = useState();
   const [posttitle, setPostTitle] = useState();
@@ -53,7 +54,7 @@ function Mypost() {
     mypost
       .then((data) => {
         if (data) {
-          alert(data.data.message);
+          toast.info(data.data.message);
           // console.log(data.data.message);
           // console.log(data.data);
           // setMypostImg("");
@@ -64,7 +65,7 @@ function Mypost() {
       .catch((err) => {
         if (err) {
           console.log("err from mypost", err);
-          // alert(data.data.message);
+          // toast.error(data.data.message);
         }
       });
   };
