@@ -5,8 +5,14 @@ export default function User(props) {
   const profileImg = userData.image;
   const userName = userData.userName;
   // console.log(userData);
+  // console.log("receverUser", props.receverUser);
+  // console.log("userData._id", userData._id);
   return (
-    <div>
+    <div
+      onClick={() => {
+        props.receverUser(userData);
+      }}
+    >
       <li className="person" data-chat="person1">
         <div className="user">
           <img src={`http://localhost:5000/${profileImg}`} alt="Retail Admin" />

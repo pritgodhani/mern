@@ -1,28 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./chat.css";
 import Axios from "axios";
 import Search from "./chatComponents/Search";
 import User from "./chatComponents/User";
 import io from "socket.io-client";
+import ReceverText from "./chatComponents/ReceverText";
+import SenderText from "./chatComponents/SenderText";
 const ENDPOINT = "localhost:5000";
-var socket;
+
 export default function Chat() {
+  // console.log("chat function");
   const token = localStorage.getItem("token");
   const [loginUsers, setLoginUsers] = useState();
+  const [receverUsers, setReceverUsers] = useState(null);
   const [users, setUsers] = useState();
+  const socket = useRef();
   useEffect(() => {
     allUser();
   }, []);
-  socket = io(ENDPOINT);
-  // console.log("ioc", socket);
-  socket.emit("connection", () => {
-    console.log("socketcClient successfuly!!!");
-  });
-  socket.on("connection", () => {
-    console.log("socketcClient successfuly!!!");
-  });
+  function receverUser(data) {
+    setReceverUsers(data);
+  }
+  console.log("receverUsers", receverUsers);
+  //
+  // socketio-client
+  useEffect(() => {
+    socket.current = io(ENDPOINT);
+  }, []);
+  useEffect(() => {
+    // console.log("userid", loginUsers);
+    socket.current.emit("addUser", loginUsers?.[0]._id);
+    socket.current.on("getUser", (user) => {
+      console.log("users", user);
+    });
+    // //
+  }, [loginUsers]);
+  // console.log(socket);
+  //
   function allUser() {
-    // console.log("gwenouhnfiy");
     let datdda = Axios.get("http://localhost:5000/allUser", {
       headers: {
         Authorization: "Bearer " + token,
@@ -55,7 +70,7 @@ export default function Chat() {
   // const userSelect =
   const userSelect = users?.map((user, index) => {
     // console.log("efe");
-    return <User key={index} user={user} />;
+    return <User key={index} user={user} receverUser={receverUser} />;
     // <User />;
   });
 
@@ -101,53 +116,44 @@ export default function Chat() {
                     </div>
                     <div className="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9">
                       <div className="selected-user">
-                        <span>
-                          To: <span className="name">Emily Russell</span>
-                        </span>
+                        {receverUsers ? (
+                          <span>
+                            To:
+                            <span className="name">
+                              {receverUsers?.userName}
+                            </span>
+                          </span>
+                        ) : null}
                       </div>
                       <div className="chat-container">
                         <ul className="chat-box chatContainerScroll">
-                          <li className="chat-left">
-                            <div className="chat-avatar">
-                              <img
-                                src="https://www.bootdey.com/img/Content/avatar/avatar3.png"
-                                alt="Retail Admin"
-                              />
-                              <div className="chat-name">Russell</div>
-                            </div>
-                            <div className="chat-text">
-                              Hello, I'm Russell.
-                              <br />
-                              How can I help you today?
-                            </div>
-                            <div className="chat-hour">
-                              08:55 <span className="fa fa-check-circle"></span>
-                            </div>
-                          </li>
-                          <li className="chat-right">
-                            <div className="chat-hour">
-                              08:56 <span className="fa fa-check-circle"></span>
-                            </div>
-                            <div className="chat-text">
-                              Hi, Russell
-                              <br /> I need more information about Developer
-                              Plan.
-                            </div>
-                            <div className="chat-avatar">
-                              <img
-                                src="https://www.bootdey.com/img/Content/avatar/avatar3.png"
-                                alt="Retail Admin"
-                              />
-                              <div className="chat-name">Sam</div>
-                            </div>
-                          </li>
+                          <ReceverText />
+                          <SenderText />
                         </ul>
                         <div className="form-group mt-3 mb-0">
-                          <textarea
-                            className="form-control"
-                            rows="3"
-                            placeholder="Type your message here..."
-                          ></textarea>
+                          <form action="#" method="post">
+                            <div class="input-group">
+                              {" "}
+                              <input
+                                type="text"
+                                name="message"
+                                placeholder="Type Message ..."
+                                class="form-control"
+                              />{" "}
+                              <span class="input-group-btn">
+                                {" "}
+                                <button type="button" class="btn btn-info">
+                                  Send
+                                </button>{" "}
+                              </span>{" "}
+                            </div>
+                          </form>
+                          {/* <textarea
+                              className="form-control"
+                              rows="3"
+                              placeholder="Type your message here..."
+                            ></textarea>
+                            <button className="form-control">send</button> */}
                         </div>
                       </div>
                     </div>
