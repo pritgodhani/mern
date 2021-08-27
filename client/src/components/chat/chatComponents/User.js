@@ -4,19 +4,23 @@ export default function User(props) {
   const userData = props.user;
   const profileImg = userData.image;
   const userName = userData.userName;
-  // console.log(userData);
-  // console.log("receverUser", props.receverUser);
-  // console.log("userData._id", userData._id);
+  const activeUser = props.activeUsers?.filter((user) => {
+    // console.log("user", user.userId);
+    // console.log("userData", userData._id);
+    return user.userId === userData._id;
+  });
   return (
     <div
       onClick={() => {
-        props.receverUser(userData);
+        props.selectUser(userData);
       }}
     >
       <li className="person" data-chat="person1">
         <div className="user">
           <img src={`http://localhost:5000/${profileImg}`} alt="Retail Admin" />
-          <span className="status busy"></span>
+          <span
+            className={activeUser?.length === 0 ? null : `status online`}
+          ></span>
         </div>
         <p className="name-time">
           <span className="name">{userName}</span>

@@ -35,7 +35,7 @@ const getUser = (userId) => {
 io.on("connection", (socket) => {
   console.log("socketio conneced!!", socket.id);
   socket.on("addUser", (userId) => {
-    addUser(userId, socket.id);
+    userId ? addUser(userId, socket.id) : null;
     // console.log(userId);
     io.emit("getUser", users);
   });

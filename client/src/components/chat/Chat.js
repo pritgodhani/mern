@@ -4,8 +4,8 @@ import Axios from "axios";
 import Search from "./chatComponents/Search";
 import User from "./chatComponents/User";
 import io from "socket.io-client";
-import ReceverText from "./chatComponents/ReceverText";
-import SenderText from "./chatComponents/SenderText";
+import ChatBox from "./chatComponents/chatBox/ChatBox";
+import ChatBoxDefault from "./chatComponents/chatBox/ChatBoxDefault";
 const ENDPOINT = "localhost:5000";
 
 export default function Chat() {
@@ -14,29 +14,11 @@ export default function Chat() {
   const [loginUsers, setLoginUsers] = useState();
   const [receverUsers, setReceverUsers] = useState(null);
   const [users, setUsers] = useState();
+  const [activeUsers, setActiveUsers] = useState();
   const socket = useRef();
   useEffect(() => {
     allUser();
   }, []);
-  function receverUser(data) {
-    setReceverUsers(data);
-  }
-  console.log("receverUsers", receverUsers);
-  //
-  // socketio-client
-  useEffect(() => {
-    socket.current = io(ENDPOINT);
-  }, []);
-  useEffect(() => {
-    // console.log("userid", loginUsers);
-    socket.current.emit("addUser", loginUsers?.[0]._id);
-    socket.current.on("getUser", (user) => {
-      console.log("users", user);
-    });
-    // //
-  }, [loginUsers]);
-  // console.log(socket);
-  //
   function allUser() {
     let datdda = Axios.get("http://localhost:5000/allUser", {
       headers: {
@@ -59,19 +41,55 @@ export default function Chat() {
         // console.log("userdata", result.data);
         // console.log("loginUserId", loginUserId);
         // console.log("data", data);
-        setLoginUsers(LoginUser);
+        setLoginUsers(LoginUser?.[0]);
         setUsers(withoutLoginUsers);
       })
       .catch((err) => {
         console.log("error", err);
       });
   }
+  function selectUser(data) {
+    setReceverUsers(data);
+  }
+  // console.log("receverUsers", receverUsers);
+  //
+  // socketio-client
+  useEffect(() => {
+    socket.current = io(ENDPOINT);
+  }, []);
+  useEffect(() => {
+    // console.log("userid", loginUsers);
+    socket.current.emit("addUser", loginUsers?._id);
+    socket.current.on("getUser", (user) => {
+      setActiveUsers(user);
+      // console.log("users", user);
+    });
+    // //
+  }, [loginUsers]);
+  // console.log(socket);
+  //
+  function sendMessage(data) {
+    console.log("[Chat.js]sendMessage", data);
+    socket.current.emit("sendMessage", data);
+  }
+  useEffect(() => {
+    socket.current.on("recevMessage", (data) => {
+      console.log("recevMessage", data);
+    });
+  }, []);
+
   // console.log("user", users);
   // const userSelect =
   const userSelect = users?.map((user, index) => {
     // console.log("efe");
-    return <User key={index} user={user} receverUser={receverUser} />;
-    // <User />;
+    return (
+      <User
+        key={index}
+        user={user}
+        selectUser={selectUser}
+        activeUsers={activeUsers}
+      />
+    );
   });
 
   return (
@@ -115,47 +133,15 @@ export default function Chat() {
                       </div>
                     </div>
                     <div className="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9">
-                      <div className="selected-user">
-                        {receverUsers ? (
-                          <span>
-                            To:
-                            <span className="name">
-                              {receverUsers?.userName}
-                            </span>
-                          </span>
-                        ) : null}
-                      </div>
-                      <div className="chat-container">
-                        <ul className="chat-box chatContainerScroll">
-                          <ReceverText />
-                          <SenderText />
-                        </ul>
-                        <div className="form-group mt-3 mb-0">
-                          <form action="#" method="post">
-                            <div class="input-group">
-                              {" "}
-                              <input
-                                type="text"
-                                name="message"
-                                placeholder="Type Message ..."
-                                class="form-control"
-                              />{" "}
-                              <span class="input-group-btn">
-                                {" "}
-                                <button type="button" class="btn btn-info">
-                                  Send
-                                </button>{" "}
-                              </span>{" "}
-                            </div>
-                          </form>
-                          {/* <textarea
-                              className="form-control"
-                              rows="3"
-                              placeholder="Type your message here..."
-                            ></textarea>
-                            <button className="form-control">send</button> */}
-                        </div>
-                      </div>
+                      {receverUsers ? (
+                        <ChatBox
+                          receverUsers={receverUsers}
+                          loginUsers={loginUsers}
+                          sendMessage={sendMessage}
+                        />
+                      ) : (
+                        <ChatBoxDefault />
+                      )}
                     </div>
                   </div>
                   {/* <!-- Row end --> */}

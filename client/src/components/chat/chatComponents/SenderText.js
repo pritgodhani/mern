@@ -1,6 +1,10 @@
 import React from "react";
 
-export default function SenderText() {
+export default function SenderText(props) {
+  const SenderText = props.SenderText;
+  const senderData = props.loginUsers;
+  console.log("SenderText", SenderText);
+  console.log("senderData", senderData);
   return (
     <>
       <li className="chat-right">

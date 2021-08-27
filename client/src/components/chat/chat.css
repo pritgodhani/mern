@@ -160,7 +160,8 @@ body {
 }
 
 .users .person .user .status.online {
-  background: #9ec94a;
+  background: #c5f565;
+  /* background: #9ec94a; */
 }
 
 .users .person .user .status.offline {
