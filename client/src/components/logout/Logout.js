@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 function Logout() {
   let history = useHistory();
   localStorage.clear();
-  // window.location.reload();
+  window.location.reload();
   history.push("/");
   // window.location.href = "http://localhost:3000/login";
   // window.location.href = "http://localhost:3000/login";

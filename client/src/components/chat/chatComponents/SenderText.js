@@ -2,25 +2,25 @@ import React from "react";
 
 export default function SenderText(props) {
   const SenderText = props.SenderText;
-  const senderData = props.loginUsers;
-  console.log("SenderText", SenderText);
-  console.log("senderData", senderData);
+  const senderData = props.senderData;
+  // console.log("[SenderText.js]SenderText", SenderText);
+  // console.log("[SenderText.js]senderData", senderData);
   return (
     <>
       <li className="chat-right">
         <div className="chat-hour">
-          08:56 <span className="fa fa-check-circle"></span>
+          {Date.now()} <span className="fa fa-check-circle"></span>
         </div>
         <div className="chat-text">
-          Hi, Russell
-          <br /> I need more information about Developer Plan.
+          {/* Hi, Russell */}
+          {SenderText.Text}
         </div>
         <div className="chat-avatar">
           <img
-            src="https://www.bootdey.com/img/Content/avatar/avatar3.png"
+            src={`http://localhost:5000/${senderData.image}`}
             alt="Retail Admin"
           />
-          <div className="chat-name">Sam</div>
+          <div className="chat-name">{senderData.userName}</div>
         </div>
       </li>
     </>

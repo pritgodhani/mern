@@ -36,8 +36,8 @@ export default class Login extends Component {
       if (data.Messege) {
         // toast.info(data.Messege);
         localStorage.setItem("token", data.Token);
-        // this.setState({ redirect: "/AddPost" });
-        // window.location.reload();
+        this.setState({ redirect: "/AddPost" });
+        window.location.reload();
         // window.location.href = "/addpost";
       }
       // console.log(data);

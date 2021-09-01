@@ -13,6 +13,8 @@ export default function Chat() {
   const token = localStorage.getItem("token");
   const [loginUsers, setLoginUsers] = useState();
   const [receverUsers, setReceverUsers] = useState(null);
+  const [recevMessage, setRecevMessage] = useState(null);
+  // console.log("[Chat.ja]recevMessage", recevMessage);
   const [users, setUsers] = useState();
   const [activeUsers, setActiveUsers] = useState();
   const socket = useRef();
@@ -69,12 +71,13 @@ export default function Chat() {
   // console.log(socket);
   //
   function sendMessage(data) {
-    console.log("[Chat.js]sendMessage", data);
+    // console.log("[Chat.js]sendMessage", data);
     socket.current.emit("sendMessage", data);
   }
   useEffect(() => {
-    socket.current.on("recevMessage", (data) => {
-      console.log("recevMessage", data);
+    socket.current.on("recevMessage", async (data) => {
+      console.log("[chat.ja,socket-data]recevMessage", data);
+      await setRecevMessage(data);
     });
   }, []);
 
@@ -135,9 +138,11 @@ export default function Chat() {
                     <div className="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9">
                       {receverUsers ? (
                         <ChatBox
+                          users={users}
                           receverUsers={receverUsers}
                           loginUsers={loginUsers}
                           sendMessage={sendMessage}
+                          receverMessageObj={recevMessage}
                         />
                       ) : (
                         <ChatBoxDefault />

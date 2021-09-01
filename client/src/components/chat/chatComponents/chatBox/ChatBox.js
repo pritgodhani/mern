@@ -3,12 +3,17 @@ import ReceverText from "../ReceverText";
 import SenderText from "../SenderText";
 
 export default function ChatBox(props) {
-  const [inputText, setInputText] = useState(null);
+  // console.log(" [ChatBox.js]props", props);
+  const [inputText, setInputText] = useState("");
   // const [text, setText] = useState(null);
   var receverUsers = props.receverUsers;
   var loginUsers = props.loginUsers;
+  const receverMessageObj = props.receverMessageObj;
   const [senderObj, setSenderObj] = useState({});
+  // const [users, setusers] = useState({});
   const [showSendText, setShowSendText] = useState(false);
+  // const [showRecevText, setShowRecevText] = useState(false);
+  // console.log("[ChatBox.js]receverMessageObj", receverMessageObj);
   // console.log(" props.sendMessage", props);
   // console.log("receverUsers", receverUsers);
   // console.log("loginUsers", loginUsers);
@@ -16,24 +21,33 @@ export default function ChatBox(props) {
   // console.log("senderId", senderId);
 
   // Socket.current.emit("sendMessage");
-  function handlerChange(e) {
-    setInputText(e.target.value);
-    console.log("change text", e.target.value);
+  // if (receverMessageObj) {
+  //   setShowRecevText(true);
+  // }
+  // useEffect(() => {
+  //   console.log("receverUsers", receverUsers);
+  // }, []);
+  async function handlerChange(e) {
+    await setInputText(e.target.value);
+    // console.log("change text", e.target.value);
   }
-  function handlerSubmit(e) {
+
+  async function handlerSubmit(e) {
     e.preventDefault();
     const sendObj = {
       senderId: loginUsers?._id,
       receverId: receverUsers?._id,
       Text: inputText,
     };
-    props.sendMessage(senderObj);
+    // console.log("[ChatBox.js]sendMessage", props.sendMessage);
+    // console.log("[ChatBox.js]sendObj", sendObj);
+    await props.sendMessage(sendObj);
     setSenderObj(sendObj);
+    setInputText("");
     setShowSendText(true);
-
     // console.log("click send", SenderText);
     // setText(inputText);
-    // console.log("senderObj", senderObj);
+    // console.log("senderObj", sendObj);
 
     // return SenderText;
   }
@@ -49,9 +63,19 @@ export default function ChatBox(props) {
       </div>
       <div className="chat-container">
         <ul className="chat-box chatContainerScroll">
-          <ReceverText />
-          {SenderText}
-          {showSendText && (
+          {/* {SenderText} */}
+          {/* <ReceverText
+            users={props.users}
+            receverMessageObj={receverMessageObj}
+          /> */}
+          {props.receverMessageObj &&
+            props.receverUsers._id === props.receverMessageObj.senderId && (
+              <ReceverText
+                users={props.users}
+                receverMessageObj={receverMessageObj}
+              />
+            )}
+          {showSendText && senderObj.receverId === props.receverUsers._id && (
             <SenderText SenderText={senderObj} senderData={loginUsers} />
           )}
           {/* {console.log("render sendTest", SenderText)} */}
@@ -70,6 +94,7 @@ export default function ChatBox(props) {
                 placeholder="Type Message ..."
                 className="form-control"
                 onChange={(e) => handlerChange(e)}
+                value={inputText}
               />{" "}
               <span className="input-group-btn">
                 {" "}

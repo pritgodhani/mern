@@ -15,6 +15,7 @@ const app = express();
 const socketio = require("socket.io");
 
 const http = require("http");
+const { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } = require("constants");
 const server = http.createServer(app);
 //
 //
@@ -30,6 +31,7 @@ const removeUser = (soketId) => {
   users = users.filter((user) => user.socketId !== soketId);
 };
 const getUser = (userId) => {
+  console.log("getUser_function==>", userId);
   return users.find((user) => user.userId === userId);
 };
 io.on("connection", (socket) => {
@@ -39,9 +41,14 @@ io.on("connection", (socket) => {
     // console.log(userId);
     io.emit("getUser", users);
   });
-  socket.on("sendMessage", ({ senderId, receverId, Text }) => {
-    const user = getUser(receverId);
-    io.to(user.socketId).emit("recevMessage", { senderId, Text });
+  socket.on("sendMessage", async (data) => {
+    console.log(".khvbsrvbkhsvksnkjednfckaenfc=>>>", data);
+    const user = await getUser(data.receverId);
+    console.log(
+      "user isnvkljdcdcljewndcnjmdlqadljmwqldkldjmqdk",
+      user.socketId
+    );
+    await io.to(user.socketId).emit("recevMessage", data);
   });
   socket.on("disconnect", () => {
     console.log("a user disconnected!");
