@@ -13,7 +13,8 @@ export default function SenderText(props) {
         </div>
         <div className="chat-text">
           {/* Hi, Russell */}
-          {SenderText.Text}
+
+          {SenderText.text ? SenderText.text : SenderText.Text}
         </div>
         <div className="chat-avatar">
           <img

@@ -70,6 +70,7 @@ function Mypost() {
       });
   };
   // console.log("post id from mypoodt", postImgId );
+  // console.log("post id from mypoodt", dbmyposts );
   const postIten = dbmyposts.map((dbmypost, index) => (
     <Post
       key={index}

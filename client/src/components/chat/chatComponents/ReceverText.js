@@ -3,11 +3,11 @@ import React from "react";
 export default function ReceverText(props) {
   var users = props.users;
   var receverMessageObj = props.receverMessageObj;
-  console.log("[RecevText.js]receverMessageObj", receverMessageObj);
+  // console.log("[RecevText.js]receverMessageObj", receverMessageObj);
   var senderUser = users.filter((user) => {
     return user._id === receverMessageObj?.senderId;
   });
-  console.log("[RecevText.js]senderUser", senderUser);
+  // console.log("[RecevText.js]senderUser", senderUser);
   return (
     <>
       <li className="chat-left">
@@ -22,7 +22,7 @@ export default function ReceverText(props) {
         <div className="chat-text">
           {/* Hello, I'm Russell.
           <br /> */}
-          {receverMessageObj.Text}
+          {receverMessageObj.text?receverMessageObj.text:receverMessageObj.Text}
         </div>
         <div className="chat-hour">
           08:55 <span className="fa fa-check-circle"></span>

@@ -13,8 +13,9 @@ export default function Chat() {
   const token = localStorage.getItem("token");
   const [loginUsers, setLoginUsers] = useState();
   const [receverUsers, setReceverUsers] = useState(null);
-  const [recevMessage, setRecevMessage] = useState(null);
+  const [recevMessage, setRecevMessage] = useState([]);
   // console.log("[Chat.ja]recevMessage", recevMessage);
+  console.log("[Chat.ja]arrayofreceve", recevMessage);
   const [users, setUsers] = useState();
   const [activeUsers, setActiveUsers] = useState();
   const socket = useRef();
@@ -76,13 +77,49 @@ export default function Chat() {
   }
   useEffect(() => {
     socket.current.on("recevMessage", async (data) => {
-      console.log("[chat.ja,socket-data]recevMessage", data);
-      await setRecevMessage(data);
+      // http://localhost:5000/allUser/message  post
+      // const message =  Axios.post(
+      //   "http://localhost:5000/allUser/message",
+      //   data,
+      //   {
+      //     headers: {
+      //       Authorization: "Bearer " + token,
+      //     },
+      //   }
+      // ,(err,result)=>{
+      //   if (result) {
+      //     console.log("[chat.ja,socket-data]recevMessage_POST", result);
+      //   }
+      //   if (err) {
+      //     console.log("[chat.ja,socket-data]recevMessage error", err);
+      //     // toast.error(data.data.message);
+      //   }
+      // });
+      // message
+      //   .then((data) => {
+      //     if (data) {
+      //       console.log("[chat.ja,socket-data]recevMessage_POST", data);
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     if (err) {
+      //       console.log("[chat.ja,socket-data]recevMessage error", err);
+      //       // toast.error(data.data.message);
+      //     }
+      //   });
+      console.log("[chat.ja,socket-data]recevMessage-data", data);
+      recevMessage.push(data)
+      setRecevMessage(recevMessage)
+      console.log("[chat.ja,socket-data]recevMessage", recevMessage);
+      // await setRecevMessage(data);
     });
   }, []);
+  // function Search(){
 
+  // }
   // console.log("user", users);
   // const userSelect =
+
   const userSelect = users?.map((user, index) => {
     // console.log("efe");
     return (
@@ -136,14 +173,17 @@ export default function Chat() {
                       </div>
                     </div>
                     <div className="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9">
+                      {console.log('render s56565[chat.ja]',recevMessage, receverUsers)}
                       {receverUsers ? (
+                        <>{console.log("Inside child component")}
                         <ChatBox
                           users={users}
                           receverUsers={receverUsers}
                           loginUsers={loginUsers}
                           sendMessage={sendMessage}
                           receverMessageObj={recevMessage}
-                        />
+                
+                        /></>
                       ) : (
                         <ChatBoxDefault />
                       )}
