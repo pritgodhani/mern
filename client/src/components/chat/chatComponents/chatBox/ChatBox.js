@@ -42,20 +42,6 @@ export default function ChatBox(props) {
   console.log('recevMesagesocatIO',recevMesagesocatIO)
   // const [showRecevText, setShowRecevText] = useState(false);
   // console.log("[ChatBox.js]receverMessageObj", receverMessageObj);
-  // console.log(" props.sendMessage", props);
-  // console.log("receverUsers", receverUsers);
-  // console.log("loginUsers", props.loginUsers);
-  // let senderId = loginUsers._id;
-  // console.log("senderId", senderId);
-  // Socket.current.emit("sendMessage");
-  // if (receverMessageObj) {
-  //   setShowRecevText(true);
-  // }
-  // useEffect(() => {
-  //   console.log("receverUsers", receverUsers);
-  // }, []);
-  // console.log('receverUsers', receverUsers?._id);
-  // console.log('loginUsers', loginUsers?._id);
   useEffect(() => {
     messageObjsGET()
 

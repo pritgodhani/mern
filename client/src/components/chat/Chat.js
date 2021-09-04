@@ -113,7 +113,7 @@ export default function Chat() {
       console.log("[chat.ja,socket-data]recevMessage", recevMessage);
       // await setRecevMessage(data);
     });
-  }, []);
+  }, [recevMessage]);
   // function Search(){
 
   // }
