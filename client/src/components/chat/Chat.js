@@ -9,19 +9,19 @@ import ChatBoxDefault from "./chatComponents/chatBox/ChatBoxDefault";
 const ENDPOINT = "localhost:5000";
 
 export default function Chat() {
-  // console.log("chat function");
   const token = localStorage.getItem("token");
   const [loginUsers, setLoginUsers] = useState();
   const [receverUsers, setReceverUsers] = useState(null);
   const [recevMessage, setRecevMessage] = useState([]);
-  // console.log("[Chat.ja]recevMessage", recevMessage);
-  console.log("[Chat.ja]arrayofreceve", recevMessage);
-  const [users, setUsers] = useState();
-  const [activeUsers, setActiveUsers] = useState();
+  const [users, setUsers] = useState(null);
+  const [activeUsers, setActiveUsers] = useState(null);
+  const [sIoMsgData, setSIoMsgData] = useState(null);
   const socket = useRef();
+
   useEffect(() => {
     allUser();
   }, []);
+
   function allUser() {
     let datdda = Axios.get("http://localhost:5000/allUser", {
       headers: {
@@ -38,12 +38,6 @@ export default function Chat() {
         let LoginUser = data?.filter((user) => {
           return loginUserId === user._id;
         });
-
-        // console.log("LoginUsers", LoginUser);
-        // console.log("withoutLoginUsers", withoutLoginUsers);
-        // console.log("userdata", result.data);
-        // console.log("loginUserId", loginUserId);
-        // console.log("data", data);
         setLoginUsers(LoginUser?.[0]);
         setUsers(withoutLoginUsers);
       })
@@ -51,77 +45,74 @@ export default function Chat() {
         console.log("error", err);
       });
   }
+
   function selectUser(data) {
     setReceverUsers(data);
   }
-  // console.log("receverUsers", receverUsers);
-  //
-  // socketio-client
+  
+
   useEffect(() => {
     socket.current = io(ENDPOINT);
   }, []);
+  
   useEffect(() => {
-    // console.log("userid", loginUsers);
     socket.current.emit("addUser", loginUsers?._id);
     socket.current.on("getUser", (user) => {
       setActiveUsers(user);
-      // console.log("users", user);
     });
-    // //
   }, [loginUsers]);
-  // console.log(socket);
-  //
+  
   function sendMessage(data) {
-    // console.log("[Chat.js]sendMessage", data);
     socket.current.emit("sendMessage", data);
   }
+  
   useEffect(() => {
-    socket.current.on("recevMessage", async (data) => {
-      // http://localhost:5000/allUser/message  post
-      // const message =  Axios.post(
-      //   "http://localhost:5000/allUser/message",
-      //   data,
-      //   {
-      //     headers: {
-      //       Authorization: "Bearer " + token,
-      //     },
-      //   }
-      // ,(err,result)=>{
-      //   if (result) {
-      //     console.log("[chat.ja,socket-data]recevMessage_POST", result);
-      //   }
-      //   if (err) {
-      //     console.log("[chat.ja,socket-data]recevMessage error", err);
-      //     // toast.error(data.data.message);
-      //   }
-      // });
-      // message
-      //   .then((data) => {
-      //     if (data) {
-      //       console.log("[chat.ja,socket-data]recevMessage_POST", data);
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     if (err) {
-      //       console.log("[chat.ja,socket-data]recevMessage error", err);
-      //       // toast.error(data.data.message);
-      //     }
-      //   });
-      console.log("[chat.ja,socket-data]recevMessage-data", data);
-      recevMessage.push(data)
+    // console.log("[chat.ja,socket-data]recevMessage-data", sIoMsgData);
+    if(sIoMsgData){
+      recevMessage.push(sIoMsgData)
       setRecevMessage(recevMessage)
-      console.log("[chat.ja,socket-data]recevMessage", recevMessage);
-      // await setRecevMessage(data);
+    }
+  }, [sIoMsgData]);
+
+  useEffect(()=>{
+    socket.current.on("recevMessage", async (data) => {
+      setSIoMsgData(data)
+        // console.log('data',data);
+        // http://localhost:5000/allUser/message  post
+        // const message =  Axios.post(
+        //   "http://localhost:5000/allUser/message",
+        //   data,
+        //   {
+        //     headers:       
+        //       Authorization: "Bearer " + token,
+        //     },
+        //   }
+        // ,(err,result)=>{
+        //   if (result) {
+        //     console.log("[chat.ja,socket-data]recevMessage_POST", result);
+        //   }
+        //   if (err) {
+        //     console.log("[chat.ja,socket-data]recevMessage error", err);
+        //     // toast.error(data.data.message);
+        //   }
+        // });
+        // message
+        //   .then((data) => {
+        //     if (data) {
+        //       console.log("[chat.ja,socket-data]recevMessage_POST", data);
+        //     }
+        //   })
+        //   .catch((err) => {
+        //     if (err) {
+        //       console.log("[chat.ja,socket-data]recevMessage error", err);
+        //       // toast.error(data.data.message);
+        //     }
+        //   });
+      
     });
-  }, [recevMessage]);
-  // function Search(){
-
-  // }
-  // console.log("user", users);
-  // const userSelect =
-
+  },[])
+ 
   const userSelect = users?.map((user, index) => {
-    // console.log("efe");
     return (
       <User
         key={index}
@@ -173,9 +164,9 @@ export default function Chat() {
                       </div>
                     </div>
                     <div className="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9">
-                      {console.log('render s56565[chat.ja]',recevMessage, receverUsers)}
+                      {/* {console.log('render s56565[chat.ja]',recevMessage, receverUsers)} */}
                       {receverUsers ? (
-                        <>{console.log("Inside child component")}
+                        <>
                         <ChatBox
                           users={users}
                           receverUsers={receverUsers}

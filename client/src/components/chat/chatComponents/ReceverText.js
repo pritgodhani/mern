@@ -7,7 +7,10 @@ export default function ReceverText(props) {
   var senderUser = users.filter((user) => {
     return user._id === receverMessageObj?.senderId;
   });
-  // console.log("[RecevText.js]senderUser", senderUser);
+
+
+
+  console.log("[RecevText.js]senderUser", senderUser);
   return (
     <>
       <li className="chat-left">

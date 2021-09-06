@@ -5,47 +5,46 @@ import SenderText from "../SenderText";
 
 export default function ChatBox(props) {
   const token = localStorage.getItem("token");
-
-  console.log(" [ChatBox.js]props ===========> ", props);
+  
+  
+  
   const [inputText, setInputText] = useState("");
-  const [receverMessageObj, setReceverMessageObj] = useState([]);
+  // const [receverMessageObj, setReceverMessageObj] = useState([]);
   // const [text, setText] = useState(null);
   var receverUsers = props.receverUsers;
   var loginUsers = props.loginUsers;
   
   // const [senderObj, setSenderObj] = useState(null);
   const [sendArray, setSendArray] = useState([]);
+  // const [recevArray, setRecevArray] = useState([]);
+  
   const [texts, setText] = useState({});
-  // const [showSendText, setShowSendText] = useState(false);
-    // const sendArray = []
-    useEffect(()=>{
-      var  receverMessageObj = props.receverMessageObj;
-      setReceverMessageObj(receverMessageObj)
-    },[props.receverMessageObj])
-  const sendMesagesocatIO = sendArray.map((text, index) => {
-    if (loginUsers?._id === text.senderId && receverUsers?._id === text.receverId) {
-      return <SenderText key={index} SenderText={text} senderData={loginUsers} />
-      // return console.log('text',text)
-    } })
-  const recevMesagesocatIO = receverMessageObj.map((text, index) => {
-    if (loginUsers?._id === text.receverId && receverUsers?._id === text.senderId) {
-      return <ReceverText
-        key={index}
-        users={props.users}
-        receverMessageObj={text}
-      />
-      // return console.log('text',text)
-    } })
-  console.log('sendArray',sendArray)
-  console.log('sendMesagesocatIO',sendMesagesocatIO)
-  console.log('[ChatBox.js]receverMessageObj',receverMessageObj)
-  console.log('recevMesagesocatIO',recevMesagesocatIO)
-  // const [showRecevText, setShowRecevText] = useState(false);
-  // console.log("[ChatBox.js]receverMessageObj", receverMessageObj);
+//   console.log('sendArray',sendArray)
+// console.log('receverMessageObj',receverMessageObj)
+useEffect(()=>{
+  const  receverMessageObj = props.receverMessageObj;
+  console.log(" [ChatBox.js]props ===========> ",props);
+  // console.log(" [ChatBox.js]props ===========> ", props.receverMessageObj);
+console.log('receverMessageObj',receverMessageObj);
+console.log('sendArray',sendArray);
+
+  // var ioTexts = receverMessageObj.concat(sendArray);
+  var ioTexts = [].concat(receverMessageObj, sendArray);
+  // var ioTexts = [...sendArray,...receverMessageObj]
+
+
+  console.log('ioTexts',ioTexts);
+  ioTexts.sort((a, b)=> {
+    return a.Time - b.Time;
+    
+  })
+  console.log('ioTexts========>',ioTexts);
+})
+
   useEffect(() => {
     messageObjsGET()
-
   }, [receverUsers?._id]);
+
   const messageObjsGET = () => {
     var messagedataGet = axios.get("http://localhost:5000/allUser/message ", {
       headers: {
@@ -53,7 +52,6 @@ export default function ChatBox(props) {
           "Bearer " + token + " " + loginUsers?._id + " " + receverUsers?._id,
       },
     });
-
     messagedataGet
       .then((data) => {
         // console.log("GET_MESSAGE_CHAT_BOX", data.data.data);
@@ -63,10 +61,9 @@ export default function ChatBox(props) {
         console.log("[chatBox.js]", err);
       });
   }
+
   async function handlerChange(e) {
     await setInputText(e.target.value);
-    // console.log("change text", e.target.value);
-
   }
   async function handlerSubmit(e) {
     e.preventDefault();
@@ -74,28 +71,19 @@ export default function ChatBox(props) {
       senderId: loginUsers?._id,
       receverId: receverUsers?._id,
       Text: inputText,
+      Time:Date.now()
     };
     sendArray.push(sendObj)
     setSendArray(sendArray)
-    // console.log("[ChatBox.js]sendMessage", props.sendMessage);
-    // console.log("[ChatBox.js]sendObj", sendObj);
     await props.sendMessage(sendObj);
-    // setSenderObj(sendObj);
     setInputText("");
-    // setShowSendText(true);
-
   }
 
-  // console.log("setStete", texts);
-  // for (const i of texts) {
-  //   console.log(i); // logs 0, 1, 2, "foo", "arrCustom", "objCustom"
-  // }
   try {
 
     var textObj = texts?.map((text, index) => {
       if (loginUsers?._id === text.senderId && receverUsers?._id === text.receverId) {
         return <SenderText key={index} SenderText={text} senderData={loginUsers} />
-        // return console.log('text',text)
       }
       if (loginUsers?._id === text.receverId && receverUsers?._id === text.senderId) {
         return <ReceverText
@@ -103,10 +91,8 @@ export default function ChatBox(props) {
           users={props.users}
           receverMessageObj={text}
         />
-        // return console.log('text',text)
       }
     });
-    // console.log(textObj);
   } catch (error) {
     console.log(error)
   }
@@ -122,25 +108,7 @@ export default function ChatBox(props) {
       </div>
       <div className="chat-container">
         <ul className="chat-box chatContainerScroll">
-          {/* {SenderText} */}
-          {/* <ReceverText
-            users={props.users}
-            receverMessageObj={receverMessageObj}
-          /> */}
           {textObj}
-          {sendMesagesocatIO}
-          {recevMesagesocatIO}
-          {/* {props.receverMessageObj &&
-            props.receverUsers._id === props.receverMessageObj.senderId && (
-              <ReceverText
-                users={props.users}
-                receverMessageObj={receverMessageObj}
-              />
-            )} */}
-          {/* {sendArray.length !== 0 && senderObj.receverId === props.receverUsers._id && (
-            <SenderText SenderText={senderObj} senderData={loginUsers} />
-          )} */}
-          {/* {console.log("render sendTest", SenderText)} */}
         </ul>
         <div className="form-group mt-3 mb-0">
           <form
