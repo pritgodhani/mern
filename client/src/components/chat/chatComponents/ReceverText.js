@@ -10,7 +10,7 @@ export default function ReceverText(props) {
 
 
 
-  console.log("[RecevText.js]senderUser", senderUser);
+  // console.log("[RecevText.js]senderUser", senderUser);
   return (
     <>
       <li className="chat-left">
@@ -27,9 +27,9 @@ export default function ReceverText(props) {
           <br /> */}
           {receverMessageObj.text?receverMessageObj.text:receverMessageObj.Text}
         </div>
-        <div className="chat-hour">
+        {/* <div className="chat-hour">
           08:55 <span className="fa fa-check-circle"></span>
-        </div>
+        </div> */}
       </li>
     </>
   );

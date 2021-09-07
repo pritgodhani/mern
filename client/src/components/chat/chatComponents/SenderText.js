@@ -8,9 +8,9 @@ export default function SenderText(props) {
   return (
     <>
       <li className="chat-right">
-        <div className="chat-hour">
-          {Date.now()} <span className="fa fa-check-circle"></span>
-        </div>
+        {/* <div className="chat-hour">
+        {SenderText.date ? SenderText.date : SenderText.Times} <span className="fa fa-check-circle"></span>
+        </div> */}
         <div className="chat-text">
           {/* Hi, Russell */}
 

@@ -230,6 +230,7 @@ body {
 .chat-container {
   position: relative;
   padding: 1rem;
+
 }
 
 .chat-container li.chat-left,
@@ -384,3 +385,5 @@ ul {
   margin-bottom: 2rem;
   box-shadow: none;
 }
+.chatBox{height: 456px !important;
+  overflow: scroll;}  

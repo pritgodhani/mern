@@ -69,8 +69,7 @@ export default function Chat() {
   useEffect(() => {
     // console.log("[chat.ja,socket-data]recevMessage-data", sIoMsgData);
     if(sIoMsgData){
-      recevMessage.push(sIoMsgData)
-      setRecevMessage(recevMessage)
+      setRecevMessage(sIoMsgData)
     }
   }, [sIoMsgData]);
 
@@ -79,35 +78,35 @@ export default function Chat() {
       setSIoMsgData(data)
         // console.log('data',data);
         // http://localhost:5000/allUser/message  post
-        // const message =  Axios.post(
-        //   "http://localhost:5000/allUser/message",
-        //   data,
-        //   {
-        //     headers:       
-        //       Authorization: "Bearer " + token,
-        //     },
-        //   }
-        // ,(err,result)=>{
-        //   if (result) {
-        //     console.log("[chat.ja,socket-data]recevMessage_POST", result);
-        //   }
-        //   if (err) {
-        //     console.log("[chat.ja,socket-data]recevMessage error", err);
-        //     // toast.error(data.data.message);
-        //   }
-        // });
-        // message
-        //   .then((data) => {
-        //     if (data) {
-        //       console.log("[chat.ja,socket-data]recevMessage_POST", data);
-        //     }
-        //   })
-        //   .catch((err) => {
-        //     if (err) {
-        //       console.log("[chat.ja,socket-data]recevMessage error", err);
-        //       // toast.error(data.data.message);
-        //     }
-        //   });
+        const message =  Axios.post(
+          "http://localhost:5000/allUser/message",
+          data,
+          {
+            headers:{     
+             Authorization: "Bearer " + token,
+            }
+            }
+        ,(err,result)=>{
+          if (result) {
+            console.log("[chat.ja,socket-data]recevMessage_POST", result);
+          }
+          if (err) {
+            console.log("[chat.ja,socket-data]recevMessage error", err);
+            // toast.error(data.data.message);
+          }
+        });
+        message
+          .then((data) => {
+            if (data) {
+              // console.log("[chat.ja,socket-data]recevMessage_POST", data);
+            }
+          })
+          .catch((err) => {
+            if (err) {
+              console.log("[chat.ja,socket-data]recevMessage error", err);
+              // toast.error(data.data.message);
+            }
+          });
       
     });
   },[])

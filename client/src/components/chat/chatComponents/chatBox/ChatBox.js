@@ -4,42 +4,51 @@ import ReceverText from "../ReceverText";
 import SenderText from "../SenderText";
 
 export default function ChatBox(props) {
-  const token = localStorage.getItem("token");
   
+  const token = localStorage.getItem("token");
+  const  receverMessageObj = props.receverMessageObj;
   
   
   const [inputText, setInputText] = useState("");
-  // const [receverMessageObj, setReceverMessageObj] = useState([]);
-  // const [text, setText] = useState(null);
   var receverUsers = props.receverUsers;
   var loginUsers = props.loginUsers;
   
-  // const [senderObj, setSenderObj] = useState(null);
-  const [sendArray, setSendArray] = useState([]);
-  // const [recevArray, setRecevArray] = useState([]);
-  
   const [texts, setText] = useState({});
-//   console.log('sendArray',sendArray)
-// console.log('receverMessageObj',receverMessageObj)
+  const [textsIO, setTextIO] = useState([]);
+  const [textObjIOhtml, setTextObjIOhtml] = useState();
+
+// console.log('textIO',textsIO);
+
 useEffect(()=>{
-  const  receverMessageObj = props.receverMessageObj;
-  console.log(" [ChatBox.js]props ===========> ",props);
-  // console.log(" [ChatBox.js]props ===========> ", props.receverMessageObj);
-console.log('receverMessageObj',receverMessageObj);
-console.log('sendArray',sendArray);
+  if(receverMessageObj){
+    textsIO.push(receverMessageObj)
+    setTextIO([...textsIO])
+    console.log('receverMessageObj',receverMessageObj);
+  }
 
-  // var ioTexts = receverMessageObj.concat(sendArray);
-  var ioTexts = [].concat(receverMessageObj, sendArray);
-  // var ioTexts = [...sendArray,...receverMessageObj]
+},[receverMessageObj])
 
-
-  console.log('ioTexts',ioTexts);
-  ioTexts.sort((a, b)=> {
-    return a.Time - b.Time;
+  useEffect(() => {
     
-  })
-  console.log('ioTexts========>',ioTexts);
-})
+    try {
+
+      var textObjIO = textsIO?.map((text, index) => {
+        if (loginUsers?._id === text.senderId && receverUsers?._id === text.receverId) {
+          return <SenderText key={index} SenderText={text} senderData={loginUsers} />
+        }
+        if (loginUsers?._id === text.receverId && receverUsers?._id === text.senderId) {
+          return <ReceverText
+            key={index}
+            users={props.users}
+            receverMessageObj={text}
+          />
+        }
+      });
+      setTextObjIOhtml(textObjIO)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [textsIO]);
 
   useEffect(() => {
     messageObjsGET()
@@ -73,8 +82,8 @@ console.log('sendArray',sendArray);
       Text: inputText,
       Time:Date.now()
     };
-    sendArray.push(sendObj)
-    setSendArray(sendArray)
+    textsIO.push(sendObj)
+    setTextIO([...textsIO])
     await props.sendMessage(sendObj);
     setInputText("");
   }
@@ -108,7 +117,11 @@ console.log('sendArray',sendArray);
       </div>
       <div className="chat-container">
         <ul className="chat-box chatContainerScroll">
+          <div className="chatBox">
           {textObj}
+          {textObjIOhtml}
+          </div>
+         
         </ul>
         <div className="form-group mt-3 mb-0">
           <form
