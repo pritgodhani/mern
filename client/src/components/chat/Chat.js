@@ -14,6 +14,7 @@ export default function Chat() {
   const [receverUsers, setReceverUsers] = useState(null);
   const [recevMessage, setRecevMessage] = useState([]);
   const [users, setUsers] = useState(null);
+  const [searchUsers, setSearchUsers] = useState(null);
   const [activeUsers, setActiveUsers] = useState(null);
   const [sIoMsgData, setSIoMsgData] = useState(null);
   const socket = useRef();
@@ -39,6 +40,7 @@ export default function Chat() {
           return loginUserId === user._id;
         });
         setLoginUsers(LoginUser?.[0]);
+        // console.log('[chat.js]withoutLoginUsers',withoutLoginUsers);
         setUsers(withoutLoginUsers);
       })
       .catch((err) => {
@@ -110,8 +112,13 @@ export default function Chat() {
       
     });
   },[])
- 
-  const userSelect = users?.map((user, index) => {
+  function searchUser(searchUserObj) {
+    setSearchUsers(searchUserObj)
+  }
+  console.log('setSearchUsers',searchUsers);
+  
+  // const userSelect =searchUsers === null||searchUsers === []?users:searchUsers?.map((user, index) => {
+  const userSelect =users?.map((user, index) => {
     return (
       <User
         key={index}
@@ -155,7 +162,7 @@ export default function Chat() {
                       <div className="users-container">
                         {/* {console.log(loginUsers[0].userName)} */}
                         {/* <h3>{loginUsers[0].userName}</h3> */}
-                        <Search />
+                        <Search users={users} searchUser={searchUser}  />
                         <ul className="users">
                           {/* <User /> */}
                           {userSelect}
