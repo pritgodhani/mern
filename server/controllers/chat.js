@@ -119,7 +119,25 @@ exports.messagePOST = async (req, res, next) => {
       console.log("picError", err);
       res.json({
         error: err,
-        message: "insert mypost error",
+        message: "message post error",
+      });
+    });
+};
+exports.unsendMessagePOST = async (req, res, next) => {
+  var id = req.body.id;
+  var dbMypostobj =chatModel.findByIdAndDelete(id)
+  dbMypostobj
+    .then((data) => {
+      res.json({
+        data: data,
+        message: "post upload",
+      });
+    })
+    .catch((err) => {
+      console.log("unsend message", err);
+      res.json({
+        error: err,
+        message: "unsend message error",
       });
     });
 };

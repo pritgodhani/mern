@@ -115,10 +115,8 @@ export default function Chat() {
   function searchUser(searchUserObj) {
     setSearchUsers(searchUserObj)
   }
-  console.log('setSearchUsers',searchUsers);
   
-  // const userSelect =searchUsers === null||searchUsers === []?users:searchUsers?.map((user, index) => {
-  const userSelect =users?.map((user, index) => {
+  const userSelect =(searchUsers === null?users:searchUsers)?.map((user, index) => {
     return (
       <User
         key={index}

@@ -23,7 +23,7 @@ useEffect(()=>{
   if(receverMessageObj){
     textsIO.push(receverMessageObj)
     setTextIO([...textsIO])
-    console.log('receverMessageObj',receverMessageObj);
+    // console.log('receverMessageObj',receverMessageObj);
   }
 
 },[receverMessageObj])
@@ -92,18 +92,20 @@ useEffect(()=>{
 
     var textObj = texts?.map((text, index) => {
       if (loginUsers?._id === text.senderId && receverUsers?._id === text.receverId) {
-        return <SenderText key={index} SenderText={text} senderData={loginUsers} />
+        return <SenderText key={index} SenderText={text} senderData={loginUsers}
+        messageObjsGET={messageObjsGET} />
       }
       if (loginUsers?._id === text.receverId && receverUsers?._id === text.senderId) {
         return <ReceverText
           key={index}
           users={props.users}
           receverMessageObj={text}
+          messageObjsGET={messageObjsGET}
         />
       }
     });
   } catch (error) {
-    console.log(error)
+    // console.log(error)
   }
   return (
     <div>

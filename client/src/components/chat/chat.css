@@ -386,4 +386,8 @@ ul {
   box-shadow: none;
 }
 .chatBox{height: 456px !important;
-  overflow: scroll;}  
+  overflow: scroll;
+}  
+.displaflex{
+    display: flex;
+  }

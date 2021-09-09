@@ -32,7 +32,7 @@ function Navbar() {
                     </button>
                     <button type="button" className="btn btn-white">
                       <Link className="text-body" to="/profile">
-                        Profiley
+                        Profile
                       </Link>
                     </button>
                     <button type="button" className="btn btn-white">
