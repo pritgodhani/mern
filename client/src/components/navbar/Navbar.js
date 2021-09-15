@@ -7,7 +7,10 @@ function Navbar() {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-white">
-        <h4 className="text-body-50">instagram</h4>
+        <h4 className="text-body-50">
+          <img src="logo192.png" alt="img" width="30" height="30" />
+          Social media{" "}
+        </h4>
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <div className="btn-group" role="group" aria-label="Basic example">
